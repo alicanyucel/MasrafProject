@@ -17,12 +17,12 @@ namespace MasrafProject.WebAPI.Middlewares
                     {
                         UserName = "admin",
                         Email = "admin@admin.com",
-                        FirstName = "Taner",
-                        LastName = "Saydam",
+                        FirstName = "Mudbey",
+                        LastName = "Yazılım",
                         EmailConfirmed = true
                     };
 
-                    userManager.CreateAsync(user, "1").Wait();
+                    userManager.CreateAsync(user, "Mudbey123").Wait();
                 }
             }
         }
