@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace MasrafProject.WebAPI.Controllers;
 
 [AllowAnonymous]
-public sealed class AuthController : ApiController
+public sealed class AuthsController : ApiController
 {
-    public AuthController(IMediator mediator) : base(mediator)
+    public AuthsController(IMediator mediator) : base(mediator)
     {
     }
 
