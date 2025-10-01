@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MasrafProject.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250929192212_mfsdc32323232323")]
-    partial class mfsdc32323232323
+    [Migration("20251001092358_mg43434343433433434")]
+    partial class mg43434343433433434
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,8 +35,11 @@ namespace MasrafProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("GenelToplam")
-                        .HasColumnType("float");
+                    b.Property<decimal>("GenelToplam")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MasrafNo")
                         .IsRequired()
@@ -55,18 +58,50 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<DateTime>("Tarih")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("ToplamKdvTutar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToplamKdvTutar")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<double>("ToplamTutar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("ToplamTutar")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.ToTable("expenses");
+                    b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("MasrafProject.Domain.Entities.AppRole", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AppRoles", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.AppUser", b =>
@@ -79,16 +114,19 @@ namespace MasrafProject.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("IsDeleted")
@@ -96,6 +134,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("varchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -105,10 +144,12 @@ namespace MasrafProject.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -120,7 +161,8 @@ namespace MasrafProject.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime?>("RefreshTokenExpires")
                         .HasColumnType("datetime2");
@@ -132,11 +174,20 @@ namespace MasrafProject.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AppUsers", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ApprovalStatus", b =>
@@ -145,13 +196,15 @@ namespace MasrafProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Onay")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Onay")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.ToTable("approvalStatuses");
+                    b.ToTable("ApprovalStatuses");
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ExpenseCenterCard", b =>
@@ -159,6 +212,9 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MasrafMerkeziAdi")
                         .IsRequired()
@@ -182,14 +238,17 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<Guid>("AccountUserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("BirimFiyat")
-                        .HasColumnType("float");
+                    b.Property<decimal>("BirimFiyat")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("HizmetId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("KdvOran")
-                        .HasColumnType("float");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("KdvOran")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("LogoAktarim")
                         .HasColumnType("bit");
@@ -203,18 +262,18 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<Guid>("MasrafMerkeziId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Miktar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Miktar")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("MuhasebeAciklama")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MuhasebeOnay")
-                        .HasColumnType("int");
+                    b.Property<bool>("MuhasebeOnay")
+                        .HasColumnType("bit");
 
-                    b.Property<double>("MuhasebeTutar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("MuhasebeTutar")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("ProjeId")
                         .HasColumnType("uniqueidentifier");
@@ -226,8 +285,8 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<DateTime>("Tarih")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("Tutar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Tutar")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -236,11 +295,11 @@ namespace MasrafProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("YoneticiOnay")
-                        .HasColumnType("int");
+                    b.Property<bool>("YoneticiOnay")
+                        .HasColumnType("bit");
 
-                    b.Property<double>("YoneticiTutar")
-                        .HasColumnType("float");
+                    b.Property<decimal>("YoneticiTutar")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -252,6 +311,9 @@ namespace MasrafProject.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ProjeAdi")
                         .IsRequired()
@@ -280,32 +342,45 @@ namespace MasrafProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("KdvOrani")
-                        .HasColumnType("float");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("KdvOrani")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ServiceCards");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("UserId", "RoleId");
 
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("RoleId");
 
-                    b.HasKey("Id");
+                    b.ToTable("AppUserRoles", (string)null);
+                });
 
-                    b.ToTable("Roles");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("MasrafProject.Domain.Entities.AppRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MasrafProject.Domain.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

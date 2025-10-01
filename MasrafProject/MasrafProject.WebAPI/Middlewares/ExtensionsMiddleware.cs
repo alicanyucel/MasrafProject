@@ -22,7 +22,7 @@ namespace MasrafProject.WebAPI.Middlewares
                         EmailConfirmed = true
                     };
 
-                    userManager.CreateAsync(user, "Mudbey123").Wait();
+                    userManager.CreateAsync(user, "Mudbey123.").Wait();
                 }
             }
         }

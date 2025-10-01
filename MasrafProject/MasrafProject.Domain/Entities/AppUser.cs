@@ -9,5 +9,5 @@ public sealed class AppUser : IdentityUser<Guid>
     public string FullName => string.Join(" ", FirstName, LastName);
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpires { get; set; }
-    public bool IsDeleted { get; set; }
+    public bool IsDeleted { get; set; }=false;
 }

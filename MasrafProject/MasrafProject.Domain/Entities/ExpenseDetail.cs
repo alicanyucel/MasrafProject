@@ -11,16 +11,16 @@ public class ExpenseDetail : Entity
     public Guid MasrafMerkeziId { get; set; }
     public Guid ManagerUserId { get; set; }
     public Guid AccountUserId { get; set; }
-    public double Miktar { get; set; }
-    public double BirimFiyat { get; set; }
-    public double Tutar { get; set; }
-    public double KdvOran { get; set; } = default!;
+    public decimal Miktar { get; set; }
+    public decimal BirimFiyat { get; set; }
+    public decimal Tutar { get; set; }
+    public decimal KdvOran { get; set; } = default!;
     public string SatirAciklama { get; set; }=default!;
-    public int YoneticiOnay { get; set; }
-    public double YoneticiTutar { get; set; }
+    public bool YoneticiOnay { get; set; }
+    public decimal YoneticiTutar { get; set; }
     public string YoneticiAciklama { get; set; }=default!;
-    public int MuhasebeOnay { get; set; }
-    public double MuhasebeTutar { get; set; }
+    public bool MuhasebeOnay { get; set; }
+    public decimal MuhasebeTutar { get; set; }
     public string MuhasebeAciklama { get; set; }=default!;
     public bool LogoAktarim { get; set; }=false;    
 }
