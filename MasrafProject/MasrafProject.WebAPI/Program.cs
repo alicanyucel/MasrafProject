@@ -68,11 +68,10 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MasrafApi Mudbey Yazilîm v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MasrafApi Mudbey Yazýlým v1");
         c.RoutePrefix = "swagger";
     });
 }
-
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 app.UseCors();
@@ -80,7 +79,6 @@ app.UseExceptionHandler();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 ExtensionsMiddleware.CreateFirstUser(app);
 app.Run();
