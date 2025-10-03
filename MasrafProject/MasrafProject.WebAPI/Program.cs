@@ -19,7 +19,7 @@ builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 builder.Services.AddRateLimiter(options =>
 {
-    // Use built-in rate limiter globally: 100 requests per minute per client IP
+  
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
     {
         var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeknikServisApi Mudbey Yazilîm v1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MasrafApi Mudbey Yazilîm v1");
         c.RoutePrefix = "swagger";
     });
 }
