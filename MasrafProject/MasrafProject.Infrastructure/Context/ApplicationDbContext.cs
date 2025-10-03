@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MasrafProject.Infrastructure.Context;
 
-internal sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
+public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
