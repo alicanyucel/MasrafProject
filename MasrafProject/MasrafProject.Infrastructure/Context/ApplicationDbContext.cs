@@ -8,7 +8,7 @@ namespace MasrafProject.Infrastructure.Context;
 
 internal sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, Guid>, IUnitOfWork
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 
@@ -79,10 +79,7 @@ internal sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole,
         {
             b.ToTable("UserTokens");
         });
-        builder.Ignore<IdentityUserLogin<Guid>>();
-        builder.Ignore<IdentityUserClaim<Guid>>();
-        builder.Ignore<IdentityUserToken<Guid>>();
-        builder.Ignore<IdentityRoleClaim<Guid>>();
+
         // Domain entity konfigürasyonları
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
     }
