@@ -26,7 +26,7 @@ public static class ExtensionsMiddleware
                     EmailConfirmed = true
                 };
 
-                userManager.CreateAsync(user, "Mudbey123.").Wait();
+                userManager.CreateAsync(user, "Xr!92@Klm#2025_Secure").Wait();
             }
         }
     }
