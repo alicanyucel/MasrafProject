@@ -7,7 +7,7 @@ using TS.Result;
 
 namespace MasrafProject.Application.Features.Auth.Login
 {
-    internal sealed class LoginCommandHandler(
+    public sealed class LoginCommandHandler(
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         IJwtProvider jwtProvider) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
