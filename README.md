@@ -24,9 +24,10 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 16. Docker ile Calistirma  
 17. Extensions Metotlar  
 18. LoggingBehavior Pipeline  
-19. Yol Haritasi  
-20. Katki Rehberi  
-21. Lisans / Notlar
+19. SonarQube ve Coverage Workflow'lari  
+20. Yol Haritasi  
+21. Katki Rehberi  
+22. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -180,7 +181,14 @@ docker-compose logs -f
 - Loglama davranisi Serilog ile entegre calisir, log seviyeleri ayarlanabilir.
 - Bu sayede tum is akislari merkezi olarak izlenebilir ve hata ayiklama kolaylasir.
 
-## 19. Yol Haritasi
+## 19. SonarQube ve Coverage Workflow'lari
+- `.github/workflows/sonar.yml` : Sadece SonarQube/SonarCloud analizini ve coverage raporunu otomatik calistirir. SonarCloud icin gerekli secret'lar: `SONAR_TOKEN`, `SONAR_HOST_URL`.
+- `.github/workflows/coverage.yml` : Sadece test coverage raporu uretir ve artifact olarak kaydeder. Sonar entegrasyonu olmadan coverage takibi icin kullanilabilir.
+- Her iki workflow da push ve pull requestlerde otomatik calisir.
+- Sonar yml icinde project key ve organization ayarlarini kendi SonarCloud hesabina gore degistirmelisin.
+- Coverage raporlari `coverage.cobertura.xml` ve `coverage.opencover.xml` olarak upload edilir.
+
+## 20. Yol Haritasi
 - [ ] JWT Refresh Token & Revocation listesi
 - [ ] Redis cache + dagitic rate limit
 - [ ] Integration test (WebApplicationFactory)
@@ -189,14 +197,14 @@ docker-compose logs -f
 - [ ] Audit trail & degisiklik kaydi
 - [ ] Role / Permission matrix (fine-grained)
 
-## 20. Katki Rehberi
+## 21. Katki Rehberi
 1. Branch: `feature/<ozellik-adi>`
 2. Kod stili: Varsayilan .editorconfig (eklenecek ise) + anlamli commit mesajlari
 3. Unit test ekleyin / guncelleyin (coverage dusmesin)
 4. PR acin, CI basarili olmali, Quality Gate gecmeli
 5. Kod inceleme geri bildirimlerini uygulayin
 
-## 21. Lisans / Notlar
+## 22. Lisans / Notlar
 Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 

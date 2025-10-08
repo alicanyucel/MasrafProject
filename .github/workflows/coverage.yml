@@ -1,0 +1,42 @@
+name: Coverage Only
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+      - name: Test with coverage
+        run: |
+          dotnet test --no-build --configuration Release \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults
+          for f in TestResults/**/coverage.cobertura.xml; do
+            cp "$f" coverage.cobertura.xml || true
+          done
+          for f in TestResults/**/coverage.opencover.xml; do
+            cp "$f" coverage.opencover.xml || true
+          done
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            coverage.cobertura.xml
+            coverage.opencover.xml
+            TestResults/**/coverage.*.xml
