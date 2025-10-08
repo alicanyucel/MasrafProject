@@ -13,25 +13,26 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 5. Teknoloji Yigini  
 6. OOP, SOLID, AOP ve Cacheleme  
 7. UnitOfWork, Scrutor ve Identity API  
-8. Cekirdek Ilkeler  
-9. Akis Ornegi (Login)  
-10. Logging & Observability  
-11. Guvenlik  
-12. Rate Limiting  
-13. Health Checks  
-14. Hangfire (Arka Plan Isleri)  
-15. Veritabani & Migrasyon  
-16. Test / Coverage / Statik Analiz  
-17. CI Pipeline (GitHub Actions + Sonar)  
-18. Gelistirme Ortami Kurulumu  
-19. Docker ile Calistirma  
-20. Extensions Metotlar  
-21. LoggingBehavior Pipeline  
-22. SonarQube ve Coverage Workflow'lari  
-23. MemoryCache (IMemoryCache) ile Cacheleme  
-24. Yol Haritasi  
-25. Katki Rehberi  
-26. Lisans / Notlar
+8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory  
+9. Cekirdek Ilkeler  
+10. Akis Ornegi (Login)  
+11. Logging & Observability  
+12. Guvenlik  
+13. Rate Limiting  
+14. Health Checks  
+15. Hangfire (Arka Plan Isleri)  
+16. Veritabani & Migrasyon  
+17. Test / Coverage / Statik Analiz  
+18. CI Pipeline (GitHub Actions + Sonar)  
+19. Gelistirme Ortami Kurulumu  
+20. Docker ile Calistirma  
+21. Extensions Metotlar  
+22. LoggingBehavior Pipeline  
+23. SonarQube ve Coverage Workflow'lari  
+24. MemoryCache (IMemoryCache) ile Cacheleme  
+25. Yol Haritasi  
+26. Katki Rehberi  
+27. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -81,26 +82,33 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 - Kimlik dogrulama ve kullanici yonetimi icin Microsoft.AspNetCore.Identity API kullanilmistir. UserManager, SignInManager, RoleManager gibi servisler ile modern kimlik altyapisi saglanir.
 - API uzerinden JWT tabanli authentication ve role-based authorization desteklenir.
 
-## 8. Akis Ornegi (Login)
+## 8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory
+- Tum veri erisim islemleri icin generic repository pattern'i kullanilmistir. Bu sayede tekrar eden CRUD kodlari minimize edilmis, test edilebilirlik ve bakim kolayligi artmistir.
+- MediatR ile CQRS (Command Query Responsibility Segregation) pattern'i uygulanmistir. Tum is akislari command ve query handler'lar ile ayrik sekilde yonetilir.
+- Sonuclarin tutarli sekilde donulmesi icin Result pattern (TS.Result) kullanilmistir. Basari, hata ve mesajlar tek tipte doner.
+- SmartEnum ile enum'larin validasyonu ve genisletilmesi kolaylastirilmistir. Extension metotlar ile enum degerleri uzerinde is kurali yazmak kolaydir.
+- DbContextFactory ile EF Core context'lerinin thread-safe ve performansli sekilde olusturulmasi saglanmistir. Background job ve test senaryolari icin uygundur.
+
+## 9. Akis Ornegi (Login)
 1. Controller -> `LoginCommand`
 2. `LoginCommandHandler` UserManager / SignInManager ile kimlik dogrular
 3. JWT uretimi `IJwtProvider` uzerinden soyutlanmis
 4. Result tipi TS.Result ile tutarli cikti
 
-## 9. Logging & Observability
+## 10. Logging & Observability
 - Serilog MSSQL sink: Tablo `Logs` (otomatik olusturulur)
 - Console template sade
 - Gelistirilecek: OpenTelemetry + distributed tracing (planlandi)
 
-## 10. Guvenlik
+## 11. Guvenlik
 - JWT Bearer kimlik dogrulama (Swagger’da Security Scheme)
 - Identity lockout mekanizmasi (yanlis parola denemeleri)
 - (Plan) Refresh token / token revocation / rol tabanli politikalar
 
-## 11. Rate Limiting
+## 12. Rate Limiting
 IP basina 1 dakika pencerede 100 istek (FixedWindow). Limit asiminda 429. Gerektiginde Redis ile dagitic surum (yol haritasi).
 
-## 12. Health Checks
+## 13. Health Checks
 Endpoint: `/health`  
 Ornek cikti:
 ```json
@@ -112,7 +120,7 @@ Ornek cikti:
 ```
 Genisletme: Redis / Queue / External API / Disk / Hangfire servers.
 
-## 13. Hangfire (Arka Plan Isleri)
+## 14. Hangfire (Arka Plan Isleri)
 - Storage: SQL Server (schema otomatik)
 - Dashboard: `/hangfire` (NOT: Uretimde Authorization filter ekleyin)
 - Ornek:
@@ -121,7 +129,7 @@ BackgroundJob.Enqueue(() => service.DoWork());
 RecurringJob.AddOrUpdate("daily-report", () => reportGenerator.Run(), Cron.Daily);
 ```
 
-## 14. Veritabani & Migrasyon
+## 15. Veritabani & Migrasyon
 Komutlar:
 ```bash
 dotnet ef migrations add <Ad> --project MasrafProject/MasrafProject.Infrastructure --startup-project MasrafProject/MasrafProject.WebAPI
@@ -129,13 +137,13 @@ dotnet ef database update --project MasrafProject/MasrafProject.Infrastructure -
 ```
 Connection string: `appsettings.json` -> `SqlServer`.
 
-## 15. Test / Coverage / Statik Analiz
+## 16. Test / Coverage / Statik Analiz
 - Test Cercevesi: xUnit
 - Coverage: `dotnet test --collect:"XPlat Code Coverage"`
 - Sonar: OpenCover / Cobertura raporlarini isler (`**/coverage.opencover.xml`)
 - Oneri: Kritik domain kurallarina mutlak test, handler’larda edge case senaryolari.
 
-## 16. CI Pipeline (GitHub Actions + Sonar)
+## 17. CI Pipeline (GitHub Actions + Sonar)
 Workflow dosyasi: `.github/workflows/ci.yml`
 Secrets:
 - `SONAR_TOKEN`
@@ -143,7 +151,7 @@ Secrets:
 Degistirilecek argumanlar: Project Key (`/k:`) + Organization (`/o:`)
 Kalite Esigi: Sonar Quality Gate (or: min % coverage, yeni kod hatasiz).
 
-## 17. Gelistirme Ortami Kurulumu
+## 18. Gelistirme Ortami Kurulumu
 ```bash
 dotnet restore
 dotnet build
@@ -155,7 +163,7 @@ Varsayilan uclar:
 - Health: https://localhost:<port>/health
 - Hangfire: https://localhost:<port>/hangfire
 
-## 18. Docker ile Calistirma
+## 19. Docker ile Calistirma
 
 Proje Docker ve docker-compose ile kolayca ayaða kalkar. Aþaðýdaki adýmlarý izleyin:
 
@@ -186,25 +194,25 @@ Loglarý izlemek için:
 docker-compose logs -f
 ```
 
-## 19. Extensions Metotlar
+## 20. Extensions Metotlar
 - `MasrafProject.Application.Extensions.RepositoryExtensions.cs` ve diger extension dosyalari ile repository, validation ve utility fonksiyonlarin tekrar kullanilabilirligi artirildi.
 - Extension metotlar ile kodun okunabilirligi ve test edilebilirligi artar.
 - Ornek: `IQueryable` uzantisi ile filtreleme, validasyon icin SmartEnum uzantilari, vs.
 
-## 20. LoggingBehavior Pipeline
+## 21. LoggingBehavior Pipeline
 - `MasrafProject.Application.Behaviors.LoggingBehavior.cs` ile MediatR pipeline'a tum request/response loglama davranisi eklendi.
 - Tum CQRS komut ve sorgulari icin otomatik loglama saglanir.
 - Loglama davranisi Serilog ile entegre calisir, log seviyeleri ayarlanabilir.
 - Bu sayede tum is akislari merkezi olarak izlenebilir ve hata ayiklama kolaylasir.
 
-## 21. SonarQube ve Coverage Workflow'lari
+## 22. SonarQube ve Coverage Workflow'lari
 - `.github/workflows/sonar.yml` : Sadece SonarQube/SonarCloud analizini ve coverage raporunu otomatik calistirir. SonarCloud icin gerekli secret'lar: `SONAR_TOKEN`, `SONAR_HOST_URL`.
 - `.github/workflows/coverage.yml` : Sadece test coverage raporu uretir ve artifact olarak kaydeder. Sonar entegrasyonu olmadan coverage takibi icin kullanilabilir.
 - Her iki workflow da push ve pull requestlerde otomatik calisir.
 - Sonar yml icinde project key ve organization ayarlarini kendi SonarCloud hesabina gore degistirmelisin.
 - Coverage raporlari `coverage.cobertura.xml` ve `coverage.opencover.xml` olarak upload edilir.
 
-## 22. Yol Haritasi
+## 23. Yol Haritasi
 - [ ] JWT Refresh Token & Revocation listesi
 - [ ] Redis cache + dagitic rate limit
 - [ ] Integration test (WebApplicationFactory)
@@ -213,14 +221,14 @@ docker-compose logs -f
 - [ ] Audit trail & degisiklik kaydi
 - [ ] Role / Permission matrix (fine-grained)
 
-## 23. Katki Rehberi
+## 24. Katki Rehberi
 1. Branch: `feature/<ozellik-adi>`
 2. Kod stili: Varsayilan .editorconfig (eklenecek ise) + anlamli commit mesajlari
 3. Unit test ekleyin / guncelleyin (coverage dusmesin)
 4. PR acin, CI basarili olmali, Quality Gate gecmeli
 5. Kod inceleme geri bildirimlerini uygulayin
 
-## 24. Lisans / Notlar
+## 25. Lisans / Notlar
 Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 
