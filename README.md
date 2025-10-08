@@ -13,26 +13,27 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 5. Teknoloji Yigini  
 6. OOP, SOLID, AOP ve Cacheleme  
 7. UnitOfWork, Scrutor ve Identity API  
-8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory  
-9. Cekirdek Ilkeler  
-10. Akis Ornegi (Login)  
-11. Logging & Observability  
-12. Guvenlik  
-13. Rate Limiting  
-14. Health Checks  
-15. Hangfire (Arka Plan Isleri)  
-16. Veritabani & Migrasyon  
-17. Test / Coverage / Statik Analiz  
-18. CI Pipeline (GitHub Actions + Sonar)  
-19. Gelistirme Ortami Kurulumu  
-20. Docker ile Calistirma  
-21. Extensions Metotlar  
-22. LoggingBehavior Pipeline  
-23. SonarQube ve Coverage Workflow'lari  
-24. MemoryCache (IMemoryCache) ile Cacheleme  
-25. Yol Haritasi  
-26. Katki Rehberi  
-27. Lisans / Notlar
+8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory, EnumConverter, FluentValidation  
+9. FluentValidation  
+10. Cekirdek Ilkeler  
+11. Akis Ornegi (Login)  
+12. Logging & Observability  
+13. Guvenlik  
+14. Rate Limiting  
+15. Health Checks  
+16. Hangfire (Arka Plan Isleri)  
+17. Veritabani & Migrasyon  
+18. Test / Coverage / Statik Analiz  
+19. CI Pipeline (GitHub Actions + Sonar)  
+20. Gelistirme Ortami Kurulumu  
+21. Docker ile Calistirma  
+22. Extensions Metotlar  
+23. LoggingBehavior Pipeline  
+24. SonarQube ve Coverage Workflow'lari  
+25. MemoryCache (IMemoryCache) ile Cacheleme  
+26. Yol Haritasi  
+27. Katki Rehberi  
+28. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -82,12 +83,14 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 - Kimlik dogrulama ve kullanici yonetimi icin Microsoft.AspNetCore.Identity API kullanilmistir. UserManager, SignInManager, RoleManager gibi servisler ile modern kimlik altyapisi saglanir.
 - API uzerinden JWT tabanli authentication ve role-based authorization desteklenir.
 
-## 8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory
+## 8. Generic Repository, MediatR, CQRS, Result Pattern, SmartEnum, DbContextFactory, EnumConverter, FluentValidation
 - Tum veri erisim islemleri icin generic repository pattern'i kullanilmistir. Bu sayede tekrar eden CRUD kodlari minimize edilmis, test edilebilirlik ve bakim kolayligi artmistir.
 - MediatR ile CQRS (Command Query Responsibility Segregation) pattern'i uygulanmistir. Tum is akislari command ve query handler'lar ile ayrik sekilde yonetilir.
 - Sonuclarin tutarli sekilde donulmesi icin Result pattern (TS.Result) kullanilmistir. Basari, hata ve mesajlar tek tipte doner.
 - SmartEnum ile enum'larin validasyonu ve genisletilmesi kolaylastirilmistir. Extension metotlar ile enum degerleri uzerinde is kurali yazmak kolaydir.
 - DbContextFactory ile EF Core context'lerinin thread-safe ve performansli sekilde olusturulmasi saglanmistir. Background job ve test senaryolari icin uygundur.
+- EnumConverter altyapisi ile enum'larin JSON serialization/deserialization islemleri kolayca yapilir. API'de enum'larin string olarak donmesi ve alinmasi desteklenir.
+- **FluentValidation** ile tum command/query modellerinde otomatik ve merkezi validasyon uygulanir. Validation kurallari Application katmaninda tanimlanir ve pipeline ile otomatik tetiklenir.
 
 ## 9. Akis Ornegi (Login)
 1. Controller -> `LoginCommand`
