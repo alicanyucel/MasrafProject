@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: masrafproject-webapi:latest
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__SqlServer=Server=db;Database=MasrafProjectDatabase;User=sa;Password=Your_password123;TrustServerCertificate=True;Encrypt=False
+    depends_on:
+      - db
+    networks:
+      - masrafnet
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "Your_password123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    networks:
+      - masrafnet
+volumes:
+  mssqldata:
+networks:
+  masrafnet:
+    driver: bridge
