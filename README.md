@@ -2,34 +2,36 @@
 
 > %100 Senior seviye .NET 8, moduler, olceklenebilir mimari ornegi.
 
-Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi ve raporlanmasi icin yapilandirilabilir, genisletilebilir bir backend altyapisi sunar. Clean Architecture + DDD odakli katmanli yaklasim, test edilebilirlik, gozlemlenebilirlik ve operasyonel yonetilebilirlik hedeflenmistir.
+Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi ve raporlanmasi icin yapilandirilabilir, genisletilebilir bir backend altyapisi sunar. Clean Architecture + Clean Code + DDD odakli katmanli yaklasim, test edilebilirlik, gozlemlenebilirlik ve operasyonel yonetilebilirlik hedeflenmistir.
 
 ---
 ## Icindekiler
 1. One Cikan Ozellikler  
-2. Mimari  
-3. Katman Sorumluluklari  
-4. Teknoloji Yigini  
-5. OOP, SOLID, AOP ve Cacheleme  
-6. Cekirdek Ilkeler  
-7. Akis Ornegi (Login)  
-8. Logging & Observability  
-9. Guvenlik  
-10. Rate Limiting  
-11. Health Checks  
-12. Hangfire (Arka Plan Isleri)  
-13. Veritabani & Migrasyon  
-14. Test / Coverage / Statik Analiz  
-15. CI Pipeline (GitHub Actions + Sonar)  
-16. Gelistirme Ortami Kurulumu  
-17. Docker ile Calistirma  
-18. Extensions Metotlar  
-19. LoggingBehavior Pipeline  
-20. SonarQube ve Coverage Workflow'lari  
-21. MemoryCache (IMemoryCache) ile Cacheleme  
-22. Yol Haritasi  
-23. Katki Rehberi  
-24. Lisans / Notlar
+2. Clean Architecture & Clean Code  
+3. Mimari  
+4. Katman Sorumluluklari  
+5. Teknoloji Yigini  
+6. OOP, SOLID, AOP ve Cacheleme  
+7. UnitOfWork, Scrutor ve Identity API  
+8. Cekirdek Ilkeler  
+9. Akis Ornegi (Login)  
+10. Logging & Observability  
+11. Guvenlik  
+12. Rate Limiting  
+13. Health Checks  
+14. Hangfire (Arka Plan Isleri)  
+15. Veritabani & Migrasyon  
+16. Test / Coverage / Statik Analiz  
+17. CI Pipeline (GitHub Actions + Sonar)  
+18. Gelistirme Ortami Kurulumu  
+19. Docker ile Calistirma  
+20. Extensions Metotlar  
+21. LoggingBehavior Pipeline  
+22. SonarQube ve Coverage Workflow'lari  
+23. MemoryCache (IMemoryCache) ile Cacheleme  
+24. Yol Haritasi  
+25. Katki Rehberi  
+26. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -44,49 +46,61 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 - Sonar entegre code quality, coverage raporlama
 - Genisletilebilir test altyapisi (xUnit)
 
-## 2. Mimari
+## 2. Clean Architecture & Clean Code
+- Proje, Clean Architecture prensiplerine uygun olarak katmanli ve bagimsiz sekilde tasarlanmistir. Domain, Application, Infrastructure ve WebAPI katmanlari net sekilde ayrilmistir.
+- Clean Code yaklasimi ile okunabilir, sade, test edilebilir ve bakimi kolay kod yazilmistir. Fonksiyonlar kisa, isimlendirmeler acik ve kod tekrarindan kacinilmistir.
+- Tum business logic domain ve application katmaninda, dis bagimliliklar ise infrastructure ve WebAPI katmaninda izole edilmis ve soyutlanmistir.
+- Katmanlar arasi bagimlilik sadece iceriden disariya dogrudur (Dependency Rule).
+
+## 3. Mimari
 ```
 Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
                   (Orchestration)   (Model)     (Persistence, External Adapters)
 ```
 
-## 3. Katman Sorumluluklari
+## 4. Katman Sorumluluklari
 - `Domain`: Entity / Value Object / is kurallari. Disa bagimlilik YOK.
 - `Application`: Use case’ler (Command/Query Handler), arayuzler, DTO/Result modelleri.
 - `Infrastructure`: EF Core context, Identity store, repository / adapter implementasyonlari.
 - `WebAPI`: DI kompozisyonu, pipeline (middleware), endpoint tanimi.
 - `MasrafApi.Test`: Unit (ve ileride integration) testleri.
 
-## 4. Teknoloji Yigini
+## 5. Teknoloji Yigini
 .NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, xUnit.
 
-## 5. OOP, SOLID, AOP ve Cacheleme
+## 6. OOP, SOLID, AOP ve Cacheleme
 - Tum kod OOP prensiplerine uygun olarak yazilmistir. Entity, ValueObject, Service, Handler gibi soyutlamalar kullanilmistir.
 - SOLID prensipleri (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion) tum katmanlarda uygulanmistir.
 - AOP (Aspect Oriented Programming) icin MediatR pipeline davranislari (or: LoggingBehavior) ile cross-cutting concern'ler merkezi olarak yonetilir.
 - IMemoryCache ile performansli, thread-safe ve kolayca expire edilen gecici veri saklama saglanir. Ornek: IP bazli rate limit icin request sayisi 1 dakika boyunca cache'de tutulur.
 - Ileride dagitic cache (Redis, vs.) icin altyapi kolayca genisletilebilir.
 
-## 6. Akis Ornegi (Login)
+## 7. UnitOfWork, Scrutor ve Identity API
+- Tum transaction yonetimi ve repository islemleri UnitOfWork pattern'i ile soyutlanmistir. Bu sayede birden fazla repository ile calisirken tutarli transaction garantisi saglanir.
+- Scrutor ile otomatik dependency injection (service scanning) kullanilmistir. Application ve Infrastructure katmanlarinda interface-implementation otomatik olarak DI container'a eklenir.
+- Kimlik dogrulama ve kullanici yonetimi icin Microsoft.AspNetCore.Identity API kullanilmistir. UserManager, SignInManager, RoleManager gibi servisler ile modern kimlik altyapisi saglanir.
+- API uzerinden JWT tabanli authentication ve role-based authorization desteklenir.
+
+## 8. Akis Ornegi (Login)
 1. Controller -> `LoginCommand`
 2. `LoginCommandHandler` UserManager / SignInManager ile kimlik dogrular
 3. JWT uretimi `IJwtProvider` uzerinden soyutlanmis
 4. Result tipi TS.Result ile tutarli cikti
 
-## 7. Logging & Observability
+## 9. Logging & Observability
 - Serilog MSSQL sink: Tablo `Logs` (otomatik olusturulur)
 - Console template sade
 - Gelistirilecek: OpenTelemetry + distributed tracing (planlandi)
 
-## 8. Guvenlik
+## 10. Guvenlik
 - JWT Bearer kimlik dogrulama (Swagger’da Security Scheme)
 - Identity lockout mekanizmasi (yanlis parola denemeleri)
 - (Plan) Refresh token / token revocation / rol tabanli politikalar
 
-## 9. Rate Limiting
+## 11. Rate Limiting
 IP basina 1 dakika pencerede 100 istek (FixedWindow). Limit asiminda 429. Gerektiginde Redis ile dagitic surum (yol haritasi).
 
-## 10. Health Checks
+## 12. Health Checks
 Endpoint: `/health`  
 Ornek cikti:
 ```json
@@ -98,7 +112,7 @@ Ornek cikti:
 ```
 Genisletme: Redis / Queue / External API / Disk / Hangfire servers.
 
-## 11. Hangfire (Arka Plan Isleri)
+## 13. Hangfire (Arka Plan Isleri)
 - Storage: SQL Server (schema otomatik)
 - Dashboard: `/hangfire` (NOT: Uretimde Authorization filter ekleyin)
 - Ornek:
@@ -107,7 +121,7 @@ BackgroundJob.Enqueue(() => service.DoWork());
 RecurringJob.AddOrUpdate("daily-report", () => reportGenerator.Run(), Cron.Daily);
 ```
 
-## 12. Veritabani & Migrasyon
+## 14. Veritabani & Migrasyon
 Komutlar:
 ```bash
 dotnet ef migrations add <Ad> --project MasrafProject/MasrafProject.Infrastructure --startup-project MasrafProject/MasrafProject.WebAPI
@@ -115,13 +129,13 @@ dotnet ef database update --project MasrafProject/MasrafProject.Infrastructure -
 ```
 Connection string: `appsettings.json` -> `SqlServer`.
 
-## 13. Test / Coverage / Statik Analiz
+## 15. Test / Coverage / Statik Analiz
 - Test Cercevesi: xUnit
 - Coverage: `dotnet test --collect:"XPlat Code Coverage"`
 - Sonar: OpenCover / Cobertura raporlarini isler (`**/coverage.opencover.xml`)
 - Oneri: Kritik domain kurallarina mutlak test, handler’larda edge case senaryolari.
 
-## 14. CI Pipeline (GitHub Actions + Sonar)
+## 16. CI Pipeline (GitHub Actions + Sonar)
 Workflow dosyasi: `.github/workflows/ci.yml`
 Secrets:
 - `SONAR_TOKEN`
@@ -129,7 +143,7 @@ Secrets:
 Degistirilecek argumanlar: Project Key (`/k:`) + Organization (`/o:`)
 Kalite Esigi: Sonar Quality Gate (or: min % coverage, yeni kod hatasiz).
 
-## 15. Gelistirme Ortami Kurulumu
+## 17. Gelistirme Ortami Kurulumu
 ```bash
 dotnet restore
 dotnet build
@@ -141,7 +155,7 @@ Varsayilan uclar:
 - Health: https://localhost:<port>/health
 - Hangfire: https://localhost:<port>/hangfire
 
-## 16. Docker ile Calistirma
+## 18. Docker ile Calistirma
 
 Proje Docker ve docker-compose ile kolayca ayaða kalkar. Aþaðýdaki adýmlarý izleyin:
 
@@ -172,25 +186,25 @@ Loglarý izlemek için:
 docker-compose logs -f
 ```
 
-## 17. Extensions Metotlar
+## 19. Extensions Metotlar
 - `MasrafProject.Application.Extensions.RepositoryExtensions.cs` ve diger extension dosyalari ile repository, validation ve utility fonksiyonlarin tekrar kullanilabilirligi artirildi.
 - Extension metotlar ile kodun okunabilirligi ve test edilebilirligi artar.
 - Ornek: `IQueryable` uzantisi ile filtreleme, validasyon icin SmartEnum uzantilari, vs.
 
-## 18. LoggingBehavior Pipeline
+## 20. LoggingBehavior Pipeline
 - `MasrafProject.Application.Behaviors.LoggingBehavior.cs` ile MediatR pipeline'a tum request/response loglama davranisi eklendi.
 - Tum CQRS komut ve sorgulari icin otomatik loglama saglanir.
 - Loglama davranisi Serilog ile entegre calisir, log seviyeleri ayarlanabilir.
 - Bu sayede tum is akislari merkezi olarak izlenebilir ve hata ayiklama kolaylasir.
 
-## 19. SonarQube ve Coverage Workflow'lari
+## 21. SonarQube ve Coverage Workflow'lari
 - `.github/workflows/sonar.yml` : Sadece SonarQube/SonarCloud analizini ve coverage raporunu otomatik calistirir. SonarCloud icin gerekli secret'lar: `SONAR_TOKEN`, `SONAR_HOST_URL`.
 - `.github/workflows/coverage.yml` : Sadece test coverage raporu uretir ve artifact olarak kaydeder. Sonar entegrasyonu olmadan coverage takibi icin kullanilabilir.
 - Her iki workflow da push ve pull requestlerde otomatik calisir.
 - Sonar yml icinde project key ve organization ayarlarini kendi SonarCloud hesabina gore degistirmelisin.
 - Coverage raporlari `coverage.cobertura.xml` ve `coverage.opencover.xml` olarak upload edilir.
 
-## 20. Yol Haritasi
+## 22. Yol Haritasi
 - [ ] JWT Refresh Token & Revocation listesi
 - [ ] Redis cache + dagitic rate limit
 - [ ] Integration test (WebApplicationFactory)
@@ -199,14 +213,14 @@ docker-compose logs -f
 - [ ] Audit trail & degisiklik kaydi
 - [ ] Role / Permission matrix (fine-grained)
 
-## 21. Katki Rehberi
+## 23. Katki Rehberi
 1. Branch: `feature/<ozellik-adi>`
 2. Kod stili: Varsayilan .editorconfig (eklenecek ise) + anlamli commit mesajlari
 3. Unit test ekleyin / guncelleyin (coverage dusmesin)
 4. PR acin, CI basarili olmali, Quality Gate gecmeli
 5. Kod inceleme geri bildirimlerini uygulayin
 
-## 22. Lisans / Notlar
+## 24. Lisans / Notlar
 Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 
