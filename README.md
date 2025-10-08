@@ -22,9 +22,11 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 14. CI Pipeline (GitHub Actions + Sonar)  
 15. Gelistirme Ortami Kurulumu  
 16. Docker ile Calistirma  
-17. Yol Haritasi  
-18. Katki Rehberi  
-19. Lisans / Notlar
+17. Extensions Metotlar  
+18. LoggingBehavior Pipeline  
+19. Yol Haritasi  
+20. Katki Rehberi  
+21. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -167,23 +169,34 @@ Loglarý izlemek için:
 docker-compose logs -f
 ```
 
-## 17. Yol Haritasi
+## 17. Extensions Metotlar
+- `MasrafProject.Application.Extensions.RepositoryExtensions.cs` ve diger extension dosyalari ile repository, validation ve utility fonksiyonlarin tekrar kullanilabilirligi artirildi.
+- Extension metotlar ile kodun okunabilirligi ve test edilebilirligi artar.
+- Ornek: `IQueryable` uzantisi ile filtreleme, validasyon icin SmartEnum uzantilari, vs.
+
+## 18. LoggingBehavior Pipeline
+- `MasrafProject.Application.Behaviors.LoggingBehavior.cs` ile MediatR pipeline'a tum request/response loglama davranisi eklendi.
+- Tum CQRS komut ve sorgulari icin otomatik loglama saglanir.
+- Loglama davranisi Serilog ile entegre calisir, log seviyeleri ayarlanabilir.
+- Bu sayede tum is akislari merkezi olarak izlenebilir ve hata ayiklama kolaylasir.
+
+## 19. Yol Haritasi
 - [ ] JWT Refresh Token & Revocation listesi
-- [ ] Redis cache + dagitik rate limit
+- [ ] Redis cache + dagitic rate limit
 - [ ] Integration test (WebApplicationFactory)
 - [ ] OpenTelemetry (Tracing + Metrics + Logs birlestirme)
 - [ ] Coklu tenant yapisi (TenantId stratejisi)
 - [ ] Audit trail & degisiklik kaydi
 - [ ] Role / Permission matrix (fine-grained)
 
-## 18. Katki Rehberi
+## 20. Katki Rehberi
 1. Branch: `feature/<ozellik-adi>`
 2. Kod stili: Varsayilan .editorconfig (eklenecek ise) + anlamli commit mesajlari
 3. Unit test ekleyin / guncelleyin (coverage dusmesin)
 4. PR acin, CI basarili olmali, Quality Gate gecmeli
 5. Kod inceleme geri bildirimlerini uygulayin
 
-## 19. Lisans / Notlar
+## 21. Lisans / Notlar
 Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 
