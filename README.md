@@ -21,9 +21,10 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 13. Test / Coverage / Statik Analiz  
 14. CI Pipeline (GitHub Actions + Sonar)  
 15. Gelistirme Ortami Kurulumu  
-16. Yol Haritasi  
-17. Katki Rehberi  
-18. Lisans / Notlar
+16. Docker ile Calistirma  
+17. Yol Haritasi  
+18. Katki Rehberi  
+19. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -78,7 +79,7 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 - (Plan) Refresh token / token revocation / rol tabanli politikalar
 
 ## 9. Rate Limiting
-IP basina 1 dakika pencerede 100 istek (FixedWindow). Limit asiminda 429. Gerektiginde Redis ile dagitik surum (yol haritasi).
+IP basina 1 dakika pencerede 100 istek (FixedWindow). Limit asiminda 429. Gerektiginde Redis ile dagitic surum (yol haritasi).
 
 ## 10. Health Checks
 Endpoint: `/health`  
@@ -135,7 +136,38 @@ Varsayilan uclar:
 - Health: https://localhost:<port>/health
 - Hangfire: https://localhost:<port>/hangfire
 
-## 16. Yol Haritasi
+## 16. Docker ile Calistirma
+
+Proje Docker ve docker-compose ile kolayca ayaða kalkar. Aþaðýdaki adýmlarý izleyin:
+
+1. Docker ve docker-compose yüklü olduðundan emin olun.
+2. Ortam deðiþkenlerini (gerekirse) .env dosyasýna veya docker-compose.yml içine düzenleyin.
+3. Terminalde proje kök dizininde aþaðýdaki komutu çalýþtýrýn:
+
+```bash
+docker-compose up -d --build
+```
+
+- Web API: http://localhost:8080
+- Swagger: http://localhost:8080/swagger
+- Health: http://localhost:8080/health
+- Hangfire: http://localhost:8080/hangfire
+- SQL Server: localhost:1433 (kullanýcý: sa, þifre: Your_password123)
+
+Ýlk çalýþtýrmada SQL Server container'ý hazýrlanýrken birkaç dakika bekleyin. 
+Connection string ve portlarý ihtiyaca göre docker-compose.yml'den deðiþtirebilirsiniz.
+
+Durdurmak için:
+```bash
+docker-compose down
+```
+
+Loglarý izlemek için:
+```bash
+docker-compose logs -f
+```
+
+## 17. Yol Haritasi
 - [ ] JWT Refresh Token & Revocation listesi
 - [ ] Redis cache + dagitik rate limit
 - [ ] Integration test (WebApplicationFactory)
@@ -144,14 +176,14 @@ Varsayilan uclar:
 - [ ] Audit trail & degisiklik kaydi
 - [ ] Role / Permission matrix (fine-grained)
 
-## 17. Katki Rehberi
+## 18. Katki Rehberi
 1. Branch: `feature/<ozellik-adi>`
 2. Kod stili: Varsayilan .editorconfig (eklenecek ise) + anlamli commit mesajlari
 3. Unit test ekleyin / guncelleyin (coverage dusmesin)
 4. PR acin, CI basarili olmali, Quality Gate gecmeli
 5. Kod inceleme geri bildirimlerini uygulayin
 
-## 18. Lisans / Notlar
+## 19. Lisans / Notlar
 Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 
