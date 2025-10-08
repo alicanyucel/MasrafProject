@@ -10,24 +10,26 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 2. Mimari  
 3. Katman Sorumluluklari  
 4. Teknoloji Yigini  
-5. Cekirdek Ilkeler  
-6. Akis Ornegi (Login)  
-7. Logging & Observability  
-8. Guvenlik  
-9. Rate Limiting  
-10. Health Checks  
-11. Hangfire (Arka Plan Isleri)  
-12. Veritabani & Migrasyon  
-13. Test / Coverage / Statik Analiz  
-14. CI Pipeline (GitHub Actions + Sonar)  
-15. Gelistirme Ortami Kurulumu  
-16. Docker ile Calistirma  
-17. Extensions Metotlar  
-18. LoggingBehavior Pipeline  
-19. SonarQube ve Coverage Workflow'lari  
-20. Yol Haritasi  
-21. Katki Rehberi  
-22. Lisans / Notlar
+5. OOP, SOLID, AOP ve Cacheleme  
+6. Cekirdek Ilkeler  
+7. Akis Ornegi (Login)  
+8. Logging & Observability  
+9. Guvenlik  
+10. Rate Limiting  
+11. Health Checks  
+12. Hangfire (Arka Plan Isleri)  
+13. Veritabani & Migrasyon  
+14. Test / Coverage / Statik Analiz  
+15. CI Pipeline (GitHub Actions + Sonar)  
+16. Gelistirme Ortami Kurulumu  
+17. Docker ile Calistirma  
+18. Extensions Metotlar  
+19. LoggingBehavior Pipeline  
+20. SonarQube ve Coverage Workflow'lari  
+21. MemoryCache (IMemoryCache) ile Cacheleme  
+22. Yol Haritasi  
+23. Katki Rehberi  
+24. Lisans / Notlar
 
 ---
 ## 1. One Cikan Ozellikler
@@ -58,12 +60,12 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 ## 4. Teknoloji Yigini
 .NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, xUnit.
 
-## 5. Cekirdek Ilkeler
-- SOLID & Clean Code
-- Acikca tanimli bagimlilik akisi (ic cekirdek dis katmani bilmez)
-- Her handler tek is kurali senaryosu
-- Validasyon pipeline ile (fail fast)
-- Loglarda baglam + korelasyon (gerekirse Activity/Trace genisletilebilir)
+## 5. OOP, SOLID, AOP ve Cacheleme
+- Tum kod OOP prensiplerine uygun olarak yazilmistir. Entity, ValueObject, Service, Handler gibi soyutlamalar kullanilmistir.
+- SOLID prensipleri (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion) tum katmanlarda uygulanmistir.
+- AOP (Aspect Oriented Programming) icin MediatR pipeline davranislari (or: LoggingBehavior) ile cross-cutting concern'ler merkezi olarak yonetilir.
+- IMemoryCache ile performansli, thread-safe ve kolayca expire edilen gecici veri saklama saglanir. Ornek: IP bazli rate limit icin request sayisi 1 dakika boyunca cache'de tutulur.
+- Ileride dagitic cache (Redis, vs.) icin altyapi kolayca genisletilebilir.
 
 ## 6. Akis Ornegi (Login)
 1. Controller -> `LoginCommand`
