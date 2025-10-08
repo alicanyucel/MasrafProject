@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  build-test-sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Sonar needs full history for some features
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Install SonarScanner for .NET
+        run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Begin Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # For SonarCloud you can omit host url or set https://sonarcloud.io
+        run: |
+          dotnet sonarscanner begin \
+            /k:"<your-project-key>" \
+            /o:"<your-organization>" \
+            /d:sonar.host.url="$SONAR_HOST_URL" \
+            /d:sonar.login="$SONAR_TOKEN" \
+            /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" \
+            /d:sonar.cs.cobertura.reportsPaths="**/coverage.cobertura.xml" \
+            /d:sonar.exclusions="**/bin/**,**/obj/**,**/Migrations/**" \
+            /d:sonar.coverage.exclusions="**/Migrations/**,**/*Program.cs"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Test with coverage (collector)
+        run: |
+          dotnet test --no-build --configuration Release \
+            --collect:"XPlat Code Coverage" \
+            --results-directory TestResults
+          # Convert coverage result name(s) to fixed filenames
+          for f in TestResults/**/coverage.cobertura.xml; do
+            cp "$f" coverage.cobertura.xml || true
+          done
+          for f in TestResults/**/coverage.opencover.xml; do
+            cp "$f" coverage.opencover.xml || true
+          done
+
+      - name: End Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: |
+            coverage.cobertura.xml
+            coverage.opencover.xml
+            TestResults/**/coverage.*.xml
+
+  # (Optional) Quality Gate job if using SonarCloud and need separate status before deploy
+  quality-gate:
+    needs: build-test-sonar
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Sonar Quality Gate Status (placeholder)
+        run: echo "Quality Gate is evaluated on the Sonar platform. Use webhook or API if needed."

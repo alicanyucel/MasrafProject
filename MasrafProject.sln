@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasrafProject.Application", "MasrafProject\MasrafProject.Application\MasrafProject.Application.csproj", "{1B458295-5D28-4A71-9C84-C3C9051B3D29}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasrafProject.Infrastructure", "MasrafProject\MasrafProject.Infrastructure\MasrafProject.Infrastructure.csproj", "{B0523A9E-5AFC-4075-9F21-BCD298D117D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasrafProject.WebAPI", "MasrafProject\MasrafProject.WebAPI\MasrafProject.WebAPI.csproj", "{67780C9E-3467-4E4E-9D64-E9E3DBB44D10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MasrafApi.Test", "MasrafApi.Test\MasrafApi.Test.csproj", "{8C0A374A-E0FD-446C-8C3C-110C413A2213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{67780C9E-3467-4E4E-9D64-E9E3DBB44D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67780C9E-3467-4E4E-9D64-E9E3DBB44D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67780C9E-3467-4E4E-9D64-E9E3DBB44D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C0A374A-E0FD-446C-8C3C-110C413A2213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C0A374A-E0FD-446C-8C3C-110C413A2213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C0A374A-E0FD-446C-8C3C-110C413A2213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C0A374A-E0FD-446C-8C3C-110C413A2213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
