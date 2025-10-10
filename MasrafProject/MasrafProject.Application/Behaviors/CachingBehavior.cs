@@ -24,7 +24,8 @@ public sealed class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRe
         CancellationToken cancellationToken)
     {
         if (_cache.TryGetValue(request.CacheKey, out var cachedObj) && cachedObj is TResponse cachedResponse)
-        return cachedResponse;
+            return cachedResponse;
+        
         var response = await next();
         _cache.Set(request.CacheKey, response, request.CacheDuration);
         return response;
