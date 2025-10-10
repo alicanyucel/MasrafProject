@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
+using MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses;
+using MasrafProject.Domain.Entities;
 
-namespace MasrafProject.Application.Mapping
+namespace MasrafProject.Application.Mapping;
+
+public sealed class MappingProfile : Profile
 {
-    public sealed class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-
-        }
+        CreateMap<CreateApprovalStatusCommand,ApprovalStatus>().ReverseMap();
     }
 }

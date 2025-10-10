@@ -1,13 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses
+namespace MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses;
+
+public sealed class CreateApprovalStatusCommandValidator : AbstractValidator<CreateApprovalStatusCommand>
 {
-    internal class CreateApprovalStatusesCommandValidator
+    public CreateApprovalStatusCommandValidator()
     {
+        RuleFor(x => x.Onay).NotNull().WithMessage("Onay bilgisi boş olamaz.");
     }
 }

@@ -127,8 +127,6 @@ app.UseExceptionHandler();
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Hangfire Dashboard (gerekirse yetkilendirme eklenebilir)
 app.UseHangfireDashboard("/hangfire");
 
 app.Use(async (context, next) =>
