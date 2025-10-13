@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Users.DeleteUsers
-{
-    internal class DeleteUserCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Users.DeleteUsers;
+
+public sealed record DeleteUserCommand(Guid Id) : IRequest<Result<string>>;

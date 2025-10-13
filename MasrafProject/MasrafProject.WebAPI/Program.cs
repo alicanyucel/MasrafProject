@@ -11,17 +11,15 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text.Json;
-using Hangfire; // eklendi
-using Hangfire.SqlServer; // eklendi
+using Hangfire; 
+using Hangfire.SqlServer; 
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SqlServer")
                        ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=MasrafProjectDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
-
 var columnOptions = new ColumnOptions();
 columnOptions.Store.Remove(StandardColumn.Properties);
 columnOptions.Store.Add(StandardColumn.LogEvent);
-
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Enrich.FromLogContext()
@@ -40,7 +38,6 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog();
-
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -49,8 +46,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<ExceptionHandler>();
-
-// Hangfire service & server
 builder.Services.AddHangfire(cfg => cfg
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
@@ -177,7 +172,6 @@ app.MapHealthChecks("/health", new HealthCheckOptions
         await context.Response.WriteAsync(JsonSerializer.Serialize(payload));
     }
 });
-
 BackgroundJob.Enqueue(() => Console.WriteLine($"Hangfire started at {DateTime.Now}"));
 ExtensionsMiddleware.CreateFirstUser(app);
 app.Run();

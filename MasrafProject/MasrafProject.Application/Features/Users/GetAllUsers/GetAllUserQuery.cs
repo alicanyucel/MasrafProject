@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Application.Dtos;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Users.GetAllUsers
-{
-    internal class GetAllUserQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Users.GetAllUsers;
+
+public sealed record GetAllUserQuery : IRequest<Result<List<UserDto>>>;

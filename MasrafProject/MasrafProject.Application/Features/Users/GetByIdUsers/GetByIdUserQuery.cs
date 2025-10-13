@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Users.GetByIdUsers
-{
-    internal class GetByIdUserQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Users.GetByIdUsers;
+
+public sealed record GetUserByIdQuery(Guid Id) : IRequest<Result<AppUser>>;
