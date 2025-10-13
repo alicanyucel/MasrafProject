@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ApprovalStatuses.DeleteApprovalStatuses
-{
-    internal class DeleteApprovalStatusesCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ApprovalStatuses.DeleteApprovalStatuses;
+
+
+public sealed record DeleteApprovalStatusCommand(Guid Id) : IRequest<Result<string>>;

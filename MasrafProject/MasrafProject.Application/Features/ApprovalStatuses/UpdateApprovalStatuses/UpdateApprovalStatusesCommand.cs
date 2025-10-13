@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ApprovalStatuses.UpdateApprovalStatuses
-{
-    internal class UpdateApprovalStatusesCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ApprovalStatuses.UpdateApprovalStatuses;
+
+public sealed record UpdateApprovalStatusCommand(Guid Id,bool Onay, bool IsDeleted) : IRequest<Result<string>>;

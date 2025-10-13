@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ApprovalStatuses.GetAllApprovalStatuses
-{
-    internal class GetAllApprovalStatusesQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ApprovalStatuses.GetAllApprovalStatuses;
+
+public sealed record GetAllApprovalStatusQuery : IRequest<Result<List<ApprovalStatus>>>;
