@@ -3,6 +3,7 @@ using MasrafProject.Application.Dtos;
 using MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses;
 using MasrafProject.Application.Features.ApprovalStatuses.UpdateApprovalStatuses;
 using MasrafProject.Application.Features.Expenses.CreateExpense;
+using MasrafProject.Application.Features.Expenses.UpdateExpense;
 using MasrafProject.Application.Features.Users.CreateUsers;
 using MasrafProject.Application.Features.Users.UpdateUsers;
 using MasrafProject.Domain.Entities;
@@ -14,6 +15,7 @@ public sealed class MappingProfile : Profile
     public MappingProfile()
     {
         //Expense
+        CreateMap<UpdateExpenseCommand, Expense>().ReverseMap();
         CreateMap<CreateExpenseCommand, Expense>().ReverseMap();
         //AprpovalStatus    
         CreateMap<CreateApprovalStatusCommand,ApprovalStatus>().ReverseMap();

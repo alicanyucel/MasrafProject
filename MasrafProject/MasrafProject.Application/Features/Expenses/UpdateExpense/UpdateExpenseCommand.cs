@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Expenses.UpdateExpense
-{
-    internal class UpdateExpenseCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Expenses.UpdateExpense;
+
+public sealed record UpdateExpenseCommand(
+Guid Id,
+string MasrafNo,
+string BelgeNo,
+DateTime Tarih,
+decimal ToplamTutar,
+decimal ToplamKdvTutar,
+decimal GenelToplam,
+string PicturePath,
+Guid UserId,
+Guid MuhasebeId,
+Guid MuhasebeOnayId
+) : IRequest<Result<string>>;
