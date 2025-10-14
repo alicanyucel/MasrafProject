@@ -172,6 +172,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions
         await context.Response.WriteAsync(JsonSerializer.Serialize(payload));
     }
 });
+
 BackgroundJob.Enqueue(() => Console.WriteLine($"Hangfire started at {DateTime.Now}"));
 ExtensionsMiddleware.CreateFirstUser(app);
 app.Run();
