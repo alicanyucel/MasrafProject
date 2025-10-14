@@ -14,8 +14,7 @@ public sealed class CreateExpenseCommandValidator : AbstractValidator<CreateExpe
             .NotEmpty().WithMessage("Belge numarası boş olamaz.")
             .MaximumLength(50).WithMessage("Belge numarası en fazla 50 karakter olabilir.");
 
-        RuleFor(x => x.Tarih)
-            .LessThanOrEqualTo(DateTime.Today).WithMessage("Tarih bugünden ileri olamaz.");
+
 
         RuleFor(x => x.ToplamTutar)
             .GreaterThan(0).WithMessage("Toplam tutar sıfırdan büyük olmalıdır.");
@@ -23,9 +22,7 @@ public sealed class CreateExpenseCommandValidator : AbstractValidator<CreateExpe
         RuleFor(x => x.ToplamKdvTutar)
             .GreaterThanOrEqualTo(0).WithMessage("KDV tutarı negatif olamaz.");
 
-        RuleFor(x => x.GenelToplam)
-            .Equal(x => x.ToplamTutar + x.ToplamKdvTutar)
-            .WithMessage("Genel toplam, tutar + KDV olmalıdır.");
+
 
         RuleFor(x => x.PicturePath)
             .NotEmpty().WithMessage("Belge görsel yolu boş olamaz.");
