@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard
+namespace MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard;
+
+public class CreateExpenseCenterCardCommandValidator : AbstractValidator<CreateExpenseCenterCardCommand>
 {
-    internal class CreateExpenseCenterCardCommandValidator
+    public CreateExpenseCenterCardCommandValidator()
     {
+        RuleFor(x => x.MasrafMerkeziKodu)
+            .NotEmpty().MaximumLength(20);
+
+        RuleFor(x => x.MasrafMerkeziAdi)
+            .NotEmpty().MaximumLength(100);
     }
 }

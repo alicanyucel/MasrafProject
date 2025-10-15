@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ServiceCards.GetByIdServiceCards
-{
-    internal class GetByIdServiceCardQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ServiceCards.GetByIdServiceCards;
+
+public sealed record GetServiceCardByIdQuery(Guid Id) : IRequest<Result<ServiceCard>>;

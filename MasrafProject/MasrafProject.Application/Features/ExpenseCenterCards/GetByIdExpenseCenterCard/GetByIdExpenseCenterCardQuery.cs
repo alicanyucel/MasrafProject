@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseCenterCards.GetByIdExpenseCenterCard
-{
-    internal class GetByIdExpenseCenterCardQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseCenterCards.GetByIdExpenseCenterCard;
+
+public sealed record GetExpenseCenterCardByIdQuery(Guid Id) : IRequest<Result<ExpenseCenterCard>>;

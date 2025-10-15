@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ServiceCards.CreateServiceCards
-{
-    internal class CreateServiceCardsCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ServiceCards.CreateServiceCards;
+
+public record CreateServiceCardCommand(
+string HizmetKodu,
+string HizmetAdi,
+decimal KdvOrani
+) : IRequest<Result<string>>;

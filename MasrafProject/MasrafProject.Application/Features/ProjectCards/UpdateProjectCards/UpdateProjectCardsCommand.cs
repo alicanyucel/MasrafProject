@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ProjectCards.UpdateProjectCards
-{
-    internal class UpdateProjectCardsCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ProjectCards.UpdateProjectCards;
+
+public record UpdateProjectCardCommand(Guid Id,string ProjeKodu, string ProjeAdi) : IRequest<Result<string>>;

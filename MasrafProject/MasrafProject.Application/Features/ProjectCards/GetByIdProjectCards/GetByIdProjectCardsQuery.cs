@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ProjectCards.GetByIdProjectCards
-{
-    internal class GetByIdProjectCardsQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ProjectCards.GetByIdProjectCards;
+
+public sealed record GetByIdProjectCardQuery(Guid Id) : IRequest<Result<ProjectCard>>;

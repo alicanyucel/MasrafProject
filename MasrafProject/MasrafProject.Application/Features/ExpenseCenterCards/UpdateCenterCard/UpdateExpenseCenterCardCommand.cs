@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseCenterCards.UpdateCenterCard
-{
-    internal class UpdateExpenseCenterCardCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseCenterCards.UpdateCenterCard;
+
+public record UpdateExpenseCenterCardCommand(
+ Guid Id,
+ string MasrafMerkeziKodu,
+ string MasrafMerkeziAdi
+) : IRequest<Result<string>>;

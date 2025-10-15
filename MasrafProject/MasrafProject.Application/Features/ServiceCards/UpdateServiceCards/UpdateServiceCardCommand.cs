@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ServiceCards.UpdateServiceCards
-{
-    internal class UpdateServiceCardCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ServiceCards.UpdateServiceCards;
+
+public record UpdateServiceCardCommand(
+Guid Id,
+string HizmetKodu,
+string HizmetAdi,
+decimal KdvOrani
+) : IRequest<Result<string>>;

@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
 
-namespace MasrafProject.Application.Features.ServiceCards.CreateServiceCards
+namespace MasrafProject.Application.Features.ServiceCards.CreateServiceCards;
+
+public class CreateServiceCardCommandValidator : AbstractValidator<CreateServiceCardCommand>
 {
-    internal class CreateServiceCardCommandValidator
+    public CreateServiceCardCommandValidator()
     {
+        RuleFor(x => x.HizmetKodu)
+            .NotEmpty().MaximumLength(20);
+
+        RuleFor(x => x.HizmetAdi)
+            .NotEmpty().MaximumLength(100);
+
+        RuleFor(x => x.KdvOrani)
+            .InclusiveBetween(0, 100).WithMessage("KDV oranı 0 ile 100 arasında olmalıdır.");
     }
 }

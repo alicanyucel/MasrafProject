@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard
-{
-    internal class CreateExpenseCenterCardCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard;
+
+public record CreateExpenseCenterCardCommand(
+ string MasrafMerkeziKodu,
+ string MasrafMerkeziAdi
+) : IRequest<Result<string>>;
