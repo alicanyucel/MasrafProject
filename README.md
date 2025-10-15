@@ -68,7 +68,7 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 - `MasrafApi.Test`: Unit (ve ileride integration) testleri.
 
 ## 5. Teknoloji Yigini
-.NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, xUnit.
+.NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, OpenTelemetry, xUnit.
 
 ## 6. OOP, SOLID, AOP ve Cacheleme
 - Tum kod OOP prensiplerine uygun olarak yazilmistir. Entity, ValueObject, Service, Handler gibi soyutlamalar kullanilmistir.
@@ -101,7 +101,7 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 ## 10. Logging & Observability
 - Serilog MSSQL sink: Tablo `Logs` (otomatik olusturulur)
 - Console template sade
-- Gelistirilecek: OpenTelemetry + distributed tracing (planlandi)
+- OpenTelemetry tracing/metrics entegre: `AddCustomOpenTelemetry` (Infrastructure.Extensions.OpenTelemetryExtensions) ile ASP.NET Core, HttpClient ve SqlClient enstrumantasyonu aktif. Varsayilan exporter Console; OTLP icin endpoint ayarlanabilir (ornegin env: `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317`).
 
 ## 11. Guvenlik
 - JWT Bearer kimlik dogrulama (Swagger’da Security Scheme)
