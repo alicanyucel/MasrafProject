@@ -1,18 +1,19 @@
 using DefaultCorsPolicyNugetPackage;
+using Hangfire; 
+using Hangfire.SqlServer; 
 using MasrafProject.Application;
 using MasrafProject.Infrastructure;
+using MasrafProject.Infrastructure.Extensions;
 using MasrafProject.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text.Json;
-using Hangfire; 
-using Hangfire.SqlServer; 
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SqlServer")
@@ -41,6 +42,7 @@ builder.Logging.AddSerilog();
 builder.Services.AddDefaultCors();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddCustomOpenTelemetry(builder.Configuration);
 builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
