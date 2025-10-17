@@ -3,7 +3,7 @@ using TS.Result;
 
 namespace MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
 
-public record CreateExpenseDetailCommand(
+public sealed record CreateExpenseDetailCommand(
  Guid MasrafId,
  DateTime Tarih,
  Guid UserId,
