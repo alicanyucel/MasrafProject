@@ -4,6 +4,8 @@ using MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses
 using MasrafProject.Application.Features.ApprovalStatuses.UpdateApprovalStatuses;
 using MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard;
 using MasrafProject.Application.Features.ExpenseCenterCards.UpdateCenterCard;
+using MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
+using MasrafProject.Application.Features.ExpenseDetails.UpdateExpenseDetails;
 using MasrafProject.Application.Features.Expenses.CreateExpense;
 using MasrafProject.Application.Features.Expenses.UpdateExpense;
 using MasrafProject.Application.Features.ProjectCards.CreateProjectCards;
@@ -20,6 +22,9 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        // Expense Details
+        CreateMap<UpdateExpenseDetailCommand,ExpenseDetail>().ReverseMap();
+        CreateMap<CreateExpenseDetailCommand,ExpenseDetail>().ReverseMap();
         //Service Card
         CreateMap<UpdateServiceCardCommand, ServiceCard>().ReverseMap();
         CreateMap<CreateServiceCardCommand, ServiceCard>().ReverseMap();
