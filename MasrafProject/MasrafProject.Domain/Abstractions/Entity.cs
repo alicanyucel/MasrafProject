@@ -1,12 +1,11 @@
-﻿namespace MasrafProject.Domain.Abstractions
+﻿namespace MasrafProject.Domain.Abstractions;
+
+public abstract class Entity
 {
-    public abstract class Entity
+    public bool IsDeleted { get; set; }=false;
+    public Guid Id { get; set; }
+    protected Entity()
     {
-        public bool IsDeleted { get; set; }=false;
-        public Guid Id { get; set; }
-        protected Entity()
-        {
-            Id = Guid.NewGuid();
-        }
+        Id = Guid.NewGuid();
     }
 }
