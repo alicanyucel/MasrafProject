@@ -1,12 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails
-{
-    internal class CreateExpenseDetailsCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
+
+public record CreateExpenseDetailCommand(
+ Guid MasrafId,
+ DateTime Tarih,
+ Guid UserId,
+ Guid ProjeId,
+ Guid HizmetId,
+ Guid MasrafMerkeziId,
+ Guid ManagerUserId,
+ Guid AccountUserId,
+ decimal Miktar,
+ decimal BirimFiyat,
+ decimal Tutar,
+ decimal KdvOran,
+ string SatirAciklama,
+ bool YoneticiOnay,
+ decimal YoneticiTutar,
+ string YoneticiAciklama,
+ bool MuhasebeOnay,
+ decimal MuhasebeTutar,
+ string MuhasebeAciklama,
+ bool LogoAktarim
+):IRequest<Result<string>>;
