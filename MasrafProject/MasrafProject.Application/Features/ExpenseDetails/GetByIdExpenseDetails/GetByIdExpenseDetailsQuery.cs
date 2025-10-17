@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseDetails.GetByIdExpenseDetails
-{
-    internal class GetByIdExpenseDetailsQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseDetails.GetByIdExpenseDetails;
+
+public sealed record GetByIdExpenseDetailQuery(Guid Id) : IRequest<Result<ExpenseDetail>>;

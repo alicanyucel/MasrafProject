@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.ExpenseDetails.DeleteExpenseDetails
-{
-    internal class DeleteExpenseDetailsCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.ExpenseDetails.DeleteExpenseDetails;
+
+public sealed record DeleteExpenseDetailsCommand(Guid Id) : IRequest<Result<string>>;
