@@ -42,7 +42,7 @@ Bu proje; sirket ici masraf taleplerinin olusturulmasi, onaylanmasi, izlenmesi v
 - EF Core 8 + SQL Server + Identity
 - Serilog (Console + MSSQL Sink) yapilandirilabilir kolon tasarimi
 - Health Check JSON sozlesmesi + DB check
-- Rate Limiting (IP bazli sabit pencere – Fixed Window)
+- Rate Limiting (IP bazli sabit pencere â€“ Fixed Window)
 - Hangfire ile arka plan is planlama ve Dashboard
 - Swagger + JWT Security semasi
 - Sonar entegre code quality, coverage raporlama
@@ -62,13 +62,13 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 
 ## 4. Katman Sorumluluklari
 - `Domain`: Entity / Value Object / is kurallari. Disa bagimlilik YOK.
-- `Application`: Use case’ler (Command/Query Handler), arayuzler, DTO/Result modelleri.
+- `Application`: Use caseâ€™ler (Command/Query Handler), arayuzler, DTO/Result modelleri.
 - `Infrastructure`: EF Core context, Identity store, repository / adapter implementasyonlari.
 - `WebAPI`: DI kompozisyonu, pipeline (middleware), endpoint tanimi.
 - `MasrafApi.Test`: Unit (ve ileride integration) testleri.
 
 ## 5. Teknoloji Yigini
-.NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, OpenTelemetry, xUnit.
+.NET 8, C# 12, EF Core 8, Identity, MediatR, FluentValidation, Serilog, Hangfire, HealthChecks, Swagger, Sonar, OpenTelemetry,Rate Limiting,MemoryCache,XUnit.
 
 ## 6. OOP, SOLID, AOP ve Cacheleme
 - Tum kod OOP prensiplerine uygun olarak yazilmistir. Entity, ValueObject, Service, Handler gibi soyutlamalar kullanilmistir.
@@ -104,7 +104,7 @@ Presentation  ->  Application  ->  Domain  <-  Infrastructure (implementations)
 - OpenTelemetry tracing/metrics entegre: `AddCustomOpenTelemetry` (Infrastructure.Extensions.OpenTelemetryExtensions) ile ASP.NET Core, HttpClient ve SqlClient enstrumantasyonu aktif. Varsayilan exporter Console; OTLP icin endpoint ayarlanabilir (ornegin env: `OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317`).
 
 ## 11. Guvenlik
-- JWT Bearer kimlik dogrulama (Swagger’da Security Scheme)
+- JWT Bearer kimlik dogrulama (Swaggerâ€™da Security Scheme)
 - Identity lockout mekanizmasi (yanlis parola denemeleri)
 - (Plan) Refresh token / token revocation / rol tabanli politikalar
 
@@ -144,13 +144,13 @@ Connection string: `appsettings.json` -> `SqlServer`.
 - Test Cercevesi: xUnit
 - Coverage: `dotnet test --collect:"XPlat Code Coverage"`
 - Sonar: OpenCover / Cobertura raporlarini isler (`**/coverage.opencover.xml`)
-- Oneri: Kritik domain kurallarina mutlak test, handler’larda edge case senaryolari.
+- Oneri: Kritik domain kurallarina mutlak test, handlerâ€™larda edge case senaryolari.
 
 ## 17. CI Pipeline (GitHub Actions + Sonar)
 Workflow dosyasi: `.github/workflows/ci.yml`
 Secrets:
 - `SONAR_TOKEN`
-- `SONAR_HOST_URL` (SonarCloud icin opsiyonel – `https://sonarcloud.io`)
+- `SONAR_HOST_URL` (SonarCloud icin opsiyonel â€“ `https://sonarcloud.io`)
 Degistirilecek argumanlar: Project Key (`/k:`) + Organization (`/o:`)
 Kalite Esigi: Sonar Quality Gate (or: min % coverage, yeni kod hatasiz).
 
@@ -168,11 +168,11 @@ Varsayilan uclar:
 
 ## 19. Docker ile Calistirma
 
-Proje Docker ve docker-compose ile kolayca ayağa kalkar. Aşağıdaki adımları izleyin:
+Proje Docker ve docker-compose ile kolayca ayaÄŸa kalkar. AÅŸaÄŸÄ±daki adÄ±mlarÄ± izleyin:
 
-1. Docker ve docker-compose yüklü olduğundan emin olun.
-2. Ortam değişkenlerini (gerekirse) .env dosyasına veya docker-compose.yml içine düzenleyin.
-3. Terminalde proje kök dizininde aşağıdaki komutu çalıştırın:
+1. Docker ve docker-compose yÃ¼klÃ¼ olduÄŸundan emin olun.
+2. Ortam deÄŸiÅŸkenlerini (gerekirse) .env dosyasÄ±na veya docker-compose.yml iÃ§ine dÃ¼zenleyin.
+3. Terminalde proje kÃ¶k dizininde aÅŸaÄŸÄ±daki komutu Ã§alÄ±ÅŸtÄ±rÄ±n:
 
 ```bash
 docker-compose up -d --build
@@ -182,17 +182,17 @@ docker-compose up -d --build
 - Swagger: http://localhost:8080/swagger
 - Health: http://localhost:8080/health
 - Hangfire: http://localhost:8080/hangfire
-- SQL Server: localhost:1433 (kullanıcı: sa, şifre: Your_password123)
+- SQL Server: localhost:1433 (kullanÄ±cÄ±: sa, ÅŸifre: Your_password123)
 
-İlk çalıştırmada SQL Server container'ı hazırlanırken birkaç dakika bekleyin. 
-Connection string ve portları ihtiyaca göre docker-compose.yml'den değiştirebilirsiniz.
+Ä°lk Ã§alÄ±ÅŸtÄ±rmada SQL Server container'Ä± hazÄ±rlanÄ±rken birkaÃ§ dakika bekleyin. 
+Connection string ve portlarÄ± ihtiyaca gÃ¶re docker-compose.yml'den deÄŸiÅŸtirebilirsiniz.
 
-Durdurmak için:
+Durdurmak iÃ§in:
 ```bash
 docker-compose down
 ```
 
-Logları izlemek için:
+LoglarÄ± izlemek iÃ§in:
 ```bash
 docker-compose logs -f
 ```
@@ -232,7 +232,7 @@ docker-compose logs -f
 5. Kod inceleme geri bildirimlerini uygulayin
 
 ## 25. Lisans / Notlar
-Lisans secimi yapilmadi – MIT / Apache 2.0 onerilir.
+Lisans secimi yapilmadi â€“ MIT / Apache 2.0 onerilir.
 Gizli bilgiler (connection string parolalari, API key) versiyon kontrolune eklenmemeli.
 
 ---
