@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MasrafProject.WebAPI.Controllers;
 
-[Authorize(Roles = "Admin,User")]
+[Authorize(Roles = "Admin,User,Manager")]
 public sealed class UsersController : ApiController
 {
     public UsersController(IMediator mediator) : base(mediator)

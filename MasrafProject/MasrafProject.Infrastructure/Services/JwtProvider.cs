@@ -19,14 +19,20 @@ namespace MasrafProject.Infrastructure.Services
         {
             List<Claim> claims = new()
             {
-                new Claim("Id", user.Id.ToString()),
-                new Claim("Name", user.FullName),
-                new Claim("Email", user.Email ?? ""),
-                new Claim("UserName", user.UserName ?? "")
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
+                new Claim(ClaimTypes.GivenName, user.UserName ?? string.Empty)
             };
 
-            DateTime expires = DateTime.UtcNow.AddMonths(1);
+            // Include role claims so [Authorize(Roles=...)] works
+            var roles = await userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
+            DateTime expires = DateTime.UtcNow.AddMonths(1);
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
 
