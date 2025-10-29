@@ -1,21 +1,15 @@
-﻿using MasrafProject.Application.Features.Auth.Roles.SetUserRoles;
-using MasrafProject.Application.Features.ServiceCards.CreateServiceCards;
+﻿using MasrafProject.Application.Features.ServiceCards.CreateServiceCards;
 using MasrafProject.Application.Features.ServiceCards.DeleteServiceCards;
 using MasrafProject.Application.Features.ServiceCards.GetAllServiceCards;
 using MasrafProject.Application.Features.ServiceCards.GetByIdServiceCards;
 using MasrafProject.Application.Features.ServiceCards.UpdateServiceCards;
-using MasrafProject.Application.Features.Users.CreateUsers;
-using MasrafProject.Application.Features.Users.DeleteUsers;
-using MasrafProject.Application.Features.Users.GetAllUsers;
-using MasrafProject.Application.Features.Users.GetByIdUsers;
-using MasrafProject.Application.Features.Users.UpdateUsers;
 using MasrafProject.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MasrafProject.WebAPI.Controllers;
-[AllowAnonymous]
+[Authorize(Roles = "Admin,User")]
 public sealed class ServiceCardsController : ApiController
 {
     public ServiceCardsController(IMediator mediator) : base(mediator)

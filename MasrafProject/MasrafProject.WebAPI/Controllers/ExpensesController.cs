@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MasrafProject.WebAPI.Controllers;
-[AllowAnonymous]
+[Authorize(Roles = "Admin,User,Manager")]
 public class ExpensesController :ApiController
 {
     public ExpensesController(IMediator mediator) : base(mediator)
