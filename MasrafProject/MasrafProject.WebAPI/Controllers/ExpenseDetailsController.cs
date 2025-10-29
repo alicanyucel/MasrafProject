@@ -1,16 +1,15 @@
-﻿using MasrafProject.Application.Features.ExpenseDetails.DeleteExpenseDetails;
+﻿using MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
+using MasrafProject.Application.Features.ExpenseDetails.DeleteExpenseDetails;
 using MasrafProject.Application.Features.ExpenseDetails.GetAllExpenseDetails;
 using MasrafProject.Application.Features.ExpenseDetails.GetByIdExpenseDetails;
-using MasrafProject.Application.Features.Users.CreateUsers;
-using MasrafProject.Application.Features.Users.DeleteUsers;
-using MasrafProject.Application.Features.Users.GetAllUsers;
-using MasrafProject.Application.Features.Users.GetByIdUsers;
+using MasrafProject.Application.Features.ExpenseDetails.UpdateExpenseDetails;
 using MasrafProject.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MasrafProject.WebAPI.Controllers;
+
 [AllowAnonymous]
 public sealed class ExpenseDetailsController : ApiController
 {
@@ -22,21 +21,67 @@ public sealed class ExpenseDetailsController : ApiController
     public async Task<IActionResult> ExpenseDetailGetById(GetByIdExpenseDetailQuery request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
-        return Ok(result);
 
+        if (result is null)
+            return NotFound("İlgili masraf kaydı bulunamadı.");
+
+        return Ok(new
+        {
+            Message = "Masraf kaydı başarıyla getirildi.",
+            Data = result
+        });
     }
+
     [HttpPost]
     public async Task<IActionResult> ExpenseDetailDelete(DeleteExpenseDetailsCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
 
-        return NoContent();
+        return Ok(new
+        {
+            Message = "Masraf kaydı başarıyla silindi."
+        });
     }
 
     [HttpPost]
     public async Task<IActionResult> GetAllExpenseDetails(GetAllExpenseDetailsQuery request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(request, cancellationToken);
-        return Ok(response);
+
+        return Ok(new
+        {
+            Message = "Tüm masraf kayıtları başarıyla listelendi.",
+            Data = response
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateDetails(UpdateExpenseDetailCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+
+        if (!response.IsSuccessful)
+            return BadRequest(new { Message = response.ErrorMessages });
+
+        return Ok(new
+        {
+            Message = response.Data,
+            Status = "Güncelleme başarılı"
+        });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateExpenseDetails(CreateExpenseDetailCommand request, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(request, cancellationToken);
+
+        if (!response.IsSuccessful)
+            return BadRequest(new { Message = response.ErrorMessages });
+
+        return Ok(new
+        {
+            Message = response.Data,
+            Status = "Oluşturma başarılı"
+        });
     }
 }
