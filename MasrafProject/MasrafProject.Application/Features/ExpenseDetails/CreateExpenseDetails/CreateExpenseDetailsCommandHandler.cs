@@ -26,19 +26,19 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
         var kdvTutar = araToplam * request.KdvOran / 100;
         var toplamTutar = araToplam + kdvTutar;
 
-        // Yönetici tutarı kontrolü
+        // Muhasebe tutarı kontrolü
         decimal borcTutar = 0;
         decimal kabulEdilenTutar;
 
-        if (toplamTutar <= request.YoneticiTutar)
+        if (toplamTutar <= request.MuhasebeTutar)
         {
             kabulEdilenTutar = toplamTutar;
             borcTutar = 0;
         }
         else
         {
-            kabulEdilenTutar = request.YoneticiTutar;
-            borcTutar = toplamTutar - request.YoneticiTutar;
+            kabulEdilenTutar = request.MuhasebeTutar;
+            borcTutar = toplamTutar - request.MuhasebeTutar;
         }
 
         var entity = new ExpenseDetail
@@ -56,6 +56,7 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
             BirimFiyat = request.BirimFiyat,
             KdvOran = request.KdvOran,
             Tutar = kabulEdilenTutar,
+           // BorcTutar = borcTutar, // Bu alan entity'de tanımlı olmalı
             SatirAciklama = request.SatirAciklama,
             YoneticiOnay = request.YoneticiOnay,
             YoneticiTutar = request.YoneticiTutar,
@@ -67,9 +68,10 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
         };
 
         await _expenseDetailRepo.AddAsync(entity, cancellationToken);
+
         var mesaj = borcTutar > 0
-            ? $"Masraf kaydı oluşturuldu. Yönetici tutarı aşıldı, {borcTutar:N2} ₺ borç olarak kaydedildi."
-            : $"Masraf kaydı başarıyla oluşturuldu. Nihai tutar (KDV dahil): {toplamTutar:N2} ₺";
+            ? $"Masraf kaydı başarıyla oluşturuldu. Muhasebe onay tutarı aşıldı, {borcTutar:N2} ₺ borç olarak kaydedildi."
+            : $"Masraf kaydı başarıyla oluşturuldu. Nihai tutar (KDV dahil): {toplamTutar:N2} ₺, muhasebe tarafından onaylandı.";
 
         return Result<string>.Succeed(mesaj);
     }

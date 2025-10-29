@@ -20,27 +20,35 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
     {
         var entity = await _expenseDetailRepo.GetByExpressionAsync(e => e.Id == request.Id, cancellationToken);
         if (entity is null)
-        return Result<string>.Failure("Masraf kaydı bulunamadı.");
+            return Result<string>.Failure("Masraf kaydı bulunamadı.");
 
         if (!request.YoneticiOnay)
-        return Result<string>.Failure("Yönetici onayı gereklidir.");
+            return Result<string>.Failure("Yönetici onayı gereklidir.");
 
         if (!request.MuhasebeOnay)
-        return Result<string>.Failure("Muhasebe onayı gereklidir.");
+            return Result<string>.Failure("Muhasebe onayı gereklidir.");
+
+        // Tutar hesaplama
         var araToplam = request.BirimFiyat * request.Miktar;
         var kdvTutar = araToplam * request.KdvOran / 100;
         var toplamTutar = araToplam + kdvTutar;
+
+        // Muhasebe tutarı kontrolü
         decimal borcTutar = 0;
-        if (toplamTutar <= request.YoneticiTutar)
+        decimal kabulEdilenTutar;
+
+        if (toplamTutar <= request.MuhasebeTutar)
         {
-            entity.Tutar = toplamTutar;
+            kabulEdilenTutar = toplamTutar;
             borcTutar = 0;
         }
         else
         {
-            entity.Tutar = request.YoneticiTutar;
-            borcTutar = toplamTutar - request.YoneticiTutar;
+            kabulEdilenTutar = request.MuhasebeTutar;
+            borcTutar = toplamTutar - request.MuhasebeTutar;
         }
+
+        // Güncelleme
         entity.MasrafId = request.MasrafId;
         entity.Tarih = request.Tarih;
         entity.UserId = request.UserId;
@@ -52,6 +60,7 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
         entity.Miktar = request.Miktar;
         entity.BirimFiyat = request.BirimFiyat;
         entity.KdvOran = request.KdvOran;
+        entity.Tutar = kabulEdilenTutar;
         entity.SatirAciklama = request.SatirAciklama;
         entity.YoneticiOnay = request.YoneticiOnay;
         entity.YoneticiTutar = request.YoneticiTutar;
@@ -60,12 +69,13 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
         entity.MuhasebeTutar = request.MuhasebeTutar;
         entity.MuhasebeAciklama = request.MuhasebeAciklama;
         entity.LogoAktarim = request.LogoAktarim;
+
         _expenseDetailRepo.Update(entity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var mesaj = borcTutar > 0
-            ? $"Masraf kaydı güncellendi. Yönetici tutarı aşıldı"
-            : $"Masraf kaydı güncellendi. Tutar yönetici onayı dahilinde kabul edildi: {toplamTutar:N2} ₺";
+            ? $"Masraf kaydı güncellendi. Muhasebe onay tutarı aşıldı, {borcTutar:N2} ₺ borç olarak kaydedildi."
+            : $"Masraf kaydı güncellendi. Nihai tutar (KDV dahil): {toplamTutar:N2} ₺, muhasebe tarafından onaylandı.";
 
         return Result<string>.Succeed(mesaj);
     }
