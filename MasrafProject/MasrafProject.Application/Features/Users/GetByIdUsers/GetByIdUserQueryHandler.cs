@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MasrafProject.Domain.Entities;
+﻿using MasrafProject.Domain.Entities;
 using MasrafProject.Domain.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +25,6 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
         return Result<AppUser>.Failure("Kullanıcı bulunamadı veya silinmiş.");
         var roles = await _userManager.GetRolesAsync(user);
         user.Roles = roles?.ToList() ?? new List<string>();
-
         return Result<AppUser>.Succeed(user);
     }
 }
