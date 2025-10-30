@@ -16,17 +16,12 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
     public async Task<Result<string>> Handle(CreateExpenseDetailCommand request, CancellationToken cancellationToken)
     {
         if (!request.YoneticiOnay)
-            return Result<string>.Failure("Yönetici onayı gereklidir.");
-
+        return Result<string>.Failure("Yönetici onayı gereklidir.");
         if (!request.MuhasebeOnay)
-            return Result<string>.Failure("Muhasebe onayı gereklidir.");
-
-        // Nihai tutar hesaplama
+        return Result<string>.Failure("Muhasebe onayı gereklidir.");
         var araToplam = request.BirimFiyat * request.Miktar;
         var kdvTutar = araToplam * request.KdvOran / 100;
         var toplamTutar = araToplam + kdvTutar;
-
-        // Muhasebe tutarı kontrolü
         decimal borcTutar = 0;
         decimal kabulEdilenTutar;
 
@@ -56,7 +51,7 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
             BirimFiyat = request.BirimFiyat,
             KdvOran = request.KdvOran,
             Tutar = kabulEdilenTutar,
-           // BorcTutar = borcTutar, // Bu alan entity'de tanımlı olmalı
+            BorcTutar = borcTutar, 
             SatirAciklama = request.SatirAciklama,
             YoneticiOnay = request.YoneticiOnay,
             YoneticiTutar = request.YoneticiTutar,

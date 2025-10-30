@@ -14,7 +14,6 @@ public sealed record CreateExpenseDetailCommand(
  Guid AccountUserId,
  decimal Miktar,
  decimal BirimFiyat,
- decimal Tutar,
  decimal KdvOran,
  string SatirAciklama,
  bool YoneticiOnay,

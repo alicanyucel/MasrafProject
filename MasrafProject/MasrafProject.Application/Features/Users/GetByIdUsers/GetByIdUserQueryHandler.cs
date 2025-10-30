@@ -23,9 +23,7 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
             cancellationToken
         );
         if (user is null)
-            return Result<AppUser>.Failure("Kullanıcı bulunamadı veya silinmiş.");
-
-        // Load roles into NotMapped property for convenience
+        return Result<AppUser>.Failure("Kullanıcı bulunamadı veya silinmiş.");
         var roles = await _userManager.GetRolesAsync(user);
         user.Roles = roles?.ToList() ?? new List<string>();
 

@@ -14,6 +14,7 @@ public class ExpenseDetail : Entity
     public decimal Miktar { get; set; }
     public decimal BirimFiyat { get; set; }
     public decimal Tutar { get; set; }
+    public decimal BorcTutar { get; set; }
     public decimal KdvOran { get; set; } = default!;
     public string SatirAciklama { get; set; }=default!;
     public bool YoneticiOnay { get; set; }

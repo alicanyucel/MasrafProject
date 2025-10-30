@@ -61,6 +61,7 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
         entity.BirimFiyat = request.BirimFiyat;
         entity.KdvOran = request.KdvOran;
         entity.Tutar = kabulEdilenTutar;
+        entity.BorcTutar = borcTutar;
         entity.SatirAciklama = request.SatirAciklama;
         entity.YoneticiOnay = request.YoneticiOnay;
         entity.YoneticiTutar = request.YoneticiTutar;
