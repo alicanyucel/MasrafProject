@@ -34,8 +34,7 @@ public sealed class RegisterCommandHandler : IRequestHandler<RegisterCommand, Re
         var user = new AppUser
         {
             UserName = userName,
-            Email = email,
-            EmailConfirmed = true // Kayıt anında e-posta onaylı olsun
+            Email = email
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
