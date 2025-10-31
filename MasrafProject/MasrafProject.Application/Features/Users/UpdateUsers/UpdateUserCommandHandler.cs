@@ -20,6 +20,8 @@ internal sealed class UpdateUserCommandHandler(
             return Result<string>.Failure("Kullanıcı bulunamadı.");
         }
         mapper.Map(request, user);
+        // Ensure email is marked as confirmed after update as requested
+        user.EmailConfirmed = true;
         userRepository.Update(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return Result<string>.Succeed("Kullanıcı güncellendi.");
