@@ -15,10 +15,12 @@ internal sealed class UpdateUserCommandHandler(
     public async Task<Result<string>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         AppUser? user = await userRepository.GetByExpressionWithTrackingAsync(u => u.Id == request.Id, cancellationToken);
+      
         if (user is null)
         {
             return Result<string>.Failure("Kullanıcı bulunamadı.");
         }
+        user.EmailConfirmed = true;
         mapper.Map(request, user);
         userRepository.Update(user);
         await unitOfWork.SaveChangesAsync(cancellationToken);
