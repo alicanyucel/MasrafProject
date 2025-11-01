@@ -12,7 +12,6 @@ internal sealed class CreateCompanyCommandHandler(ICompanyRepository companyRepo
 {
     public async Task<Result<string>> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        // Aynı kayıt kontrolü (adı aynı ve silinmemiş)
         bool exists = await companyRepository
             .GetAll()
             .AnyAsync(x => !x.IsDeleted && x.Name == request.Name, cancellationToken);
@@ -22,16 +21,11 @@ internal sealed class CreateCompanyCommandHandler(ICompanyRepository companyRepo
         }
 
         Company company = mapper.Map<Company>(request);
-
-        // Önce kaydet, Id veritabanı tarafından (1'den başlayacak şekilde) üretilecek
         await companyRepository.AddAsync(company, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
-        // TenantId = Id olacak şekilde eşitleyip güncelle
         company.TenantId = company.Id;
         companyRepository.Update(company);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-
         return Result<string>.Succeed("Şirket kaydı yapıldı");
     }
 }
