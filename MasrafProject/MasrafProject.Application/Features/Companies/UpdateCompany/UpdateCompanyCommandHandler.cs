@@ -17,6 +17,7 @@ internal sealed class UpdateCompanyCommandHandler(ICompanyRepository companyRepo
             return Result<string>.Failure("Şirket bulunamadı.");
         }
         mapper.Map(request, company);
+        company.TenantId = company.Id;
         companyRepository.Update(company);
         await unitOfWork.SaveChangesAsync(cancellationToken);
         return "Şirket güncellendi.";

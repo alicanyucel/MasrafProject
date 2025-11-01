@@ -12,8 +12,11 @@ internal sealed class CreateCompanyCommandHandler(ICompanyRepository companyRepo
     public async Task<Result<string>> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
         Company company = mapper.Map<Company>(request);
-        await companyRepository.AddAsync(company , cancellationToken);
+        await companyRepository.AddAsync(company, cancellationToken);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        return "şirket kaydı yapıldı";
+        company.TenantId = company.Id;
+        companyRepository.Update(company);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return Result<string>.Succeed("Şirket kaydı yapıldı.");
     }
 }

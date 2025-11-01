@@ -6,8 +6,7 @@ public sealed class CreateCompanyCommandValidator : AbstractValidator<CreateComp
 {
     public CreateCompanyCommandValidator()
     {
-        RuleFor(x => x.TenantId)
-            .GreaterThan(0).WithMessage("TenantId sıfırdan büyük olmalıdır");
+        
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("İsim boş olamaz")
