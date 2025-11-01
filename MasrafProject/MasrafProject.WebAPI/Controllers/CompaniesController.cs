@@ -30,11 +30,19 @@ namespace MasrafProject.WebAPI.Controllers
             var result = await _mediator.Send(request, cancellationToken);
             return Ok(result);
         }
+
         [HttpPost]
-        public async Task<IActionResult> CompanyDelete(DeleteCompanyCommand request, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteCompany(DeleteCompanyCommand request, CancellationToken cancellationToken)
         {
-            await _mediator.Send(request, cancellationToken);
-            return NoContent();
+            var result = await _mediator.Send(request, cancellationToken);
+
+            if (result.IsSuccessful)
+                return Ok(new { message = result.Data });
+
+            var error = result.ErrorMessages is { Count: > 0 }
+                ? string.Join(" | ", result.ErrorMessages)
+                : "Şirket silinemedi.";
+            return BadRequest(new { message = error });
         }
 
         [HttpPost]
