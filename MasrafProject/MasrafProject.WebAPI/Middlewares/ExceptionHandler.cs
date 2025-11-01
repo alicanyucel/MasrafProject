@@ -9,6 +9,7 @@ namespace MasrafProject.WebAPI.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
+
             Result<string> errorResult;
 
             httpContext.Response.ContentType = "application/json";
