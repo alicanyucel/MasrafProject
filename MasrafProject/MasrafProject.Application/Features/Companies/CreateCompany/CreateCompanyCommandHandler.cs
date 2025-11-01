@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using GenericRepository;
+using MasrafProject.Domain.Entities;
+using MasrafProject.Domain.Repositories;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Companies.CreateCompany
+namespace MasrafProject.Application.Features.Companies.CreateCompany;
+
+internal sealed class CreateCompanyCommandHandler(ICompanyRepository companyRepository, IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<CreateCompanyCommand, Result<string>>
 {
-    internal class CreateCompanyCommandHandler
+    public async Task<Result<string>> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
+        Company company = mapper.Map<Company>(request);
+        await companyRepository.AddAsync(company , cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+        return "şirket kaydı yapıldı";
     }
 }

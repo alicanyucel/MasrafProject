@@ -17,7 +17,7 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("SqlServer")
-                       ?? "Server=MUDBEY;Database=MasrafDb;User Id=sa;Password=MdWb293019?**1a--33;TrustServerCertificate=True;";
+                       ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=MasrafDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 var columnOptions = new ColumnOptions();
 columnOptions.Store.Remove(StandardColumn.Properties);
 columnOptions.Store.Add(StandardColumn.LogEvent);

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Companies.UpdateCompany
-{
-    internal class UpdateCompanyCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Companies.UpdateCompany;
+
+public sealed record UpdateCompanyCommand(
+int Id,
+int TenantId,
+string Name,
+string Email,
+string PhoneNumber,
+string Address
+) : IRequest<Result<string>>;

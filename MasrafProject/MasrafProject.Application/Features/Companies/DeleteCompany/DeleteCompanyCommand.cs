@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Companies.DeleteCompany
-{
-    internal class DeleteCompanyCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Companies.DeleteCompany;
+
+public sealed record DeleteCompanyCommand(int CompanyId) : IRequest<Result<string>>;

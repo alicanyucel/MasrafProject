@@ -11,7 +11,7 @@ internal sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole,
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-
+    public DbSet<Company> Companies => Set<Company>();
     public DbSet<ExpenseDetail> ExpenseDetails => Set<ExpenseDetail>();
     public DbSet<ProjectCard> ProjectCards => Set<ProjectCard>();
     public DbSet<ServiceCard> ServiceCards => Set<ServiceCard>();

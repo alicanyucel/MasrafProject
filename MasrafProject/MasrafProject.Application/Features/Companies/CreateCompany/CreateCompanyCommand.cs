@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Companies.CreateCompany
-{
-    internal class CreateCompanyCommand
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Companies.CreateCompany;
+
+
+public sealed record CreateCompanyCommand(
+int TenantId,
+string Name,
+string Email,
+string PhoneNumber,
+string Address
+) : IRequest<Result<string>>;

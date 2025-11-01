@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MasrafProject.Domain.Entities;
+using MediatR;
+using TS.Result;
 
-namespace MasrafProject.Application.Features.Companies.GetByIdCompany
-{
-    internal class GetByIdCompanyQuery
-    {
-    }
-}
+namespace MasrafProject.Application.Features.Companies.GetByIdCompany;
+
+public sealed record GetCompanyByIdQuery(int CompanyId) : IRequest<Result<Company>>;

@@ -2,6 +2,8 @@
 using MasrafProject.Application.Dtos;
 using MasrafProject.Application.Features.ApprovalStatuses.CreateApprovalStatuses;
 using MasrafProject.Application.Features.ApprovalStatuses.UpdateApprovalStatuses;
+using MasrafProject.Application.Features.Companies.CreateCompany;
+using MasrafProject.Application.Features.Companies.UpdateCompany;
 using MasrafProject.Application.Features.ExpenseCenterCards.CreateExpenseCenterCard;
 using MasrafProject.Application.Features.ExpenseCenterCards.UpdateCenterCard;
 using MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
@@ -22,6 +24,9 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        // Company
+        CreateMap<CreateCompanyCommand, Company>().ReverseMap();
+        CreateMap<UpdateCompanyCommand, Company>().ReverseMap();
         // Expense Details
         CreateMap<UpdateExpenseDetailCommand,ExpenseDetail>().ReverseMap();
         CreateMap<CreateExpenseDetailCommand,ExpenseDetail>().ReverseMap();

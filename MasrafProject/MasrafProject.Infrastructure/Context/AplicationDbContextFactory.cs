@@ -20,7 +20,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 
         var connectionString = configuration.GetConnectionString("Default")
             ?? Environment.GetEnvironmentVariable("ConnectionStrings__Default")
-            ?? "Server=MUDBEY;Database=MasrafDb;User Id=sa;Password=MdWb293019?**1a--33;TrustServerCertificate=True;";
+            ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=MasrafDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
         optionsBuilder.UseSqlServer(connectionString);
         return new ApplicationDbContext(optionsBuilder.Options);

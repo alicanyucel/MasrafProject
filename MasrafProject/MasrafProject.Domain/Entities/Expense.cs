@@ -1,6 +1,6 @@
 ﻿using MasrafProject.Domain.Abstractions;
 
-public class Expense : Entity
+public class Expense : Entity<Guid>
 {
     public string MasrafNo { get; set; }=default!;
     public string BelgeNo { get; set; }=default!;

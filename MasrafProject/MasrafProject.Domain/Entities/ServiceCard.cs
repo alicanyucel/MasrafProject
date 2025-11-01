@@ -2,7 +2,7 @@
 
 namespace MasrafProject.Domain.Entities;
 
-public class ServiceCard : Entity
+public class ServiceCard : Entity<Guid>
 { 
     public string HizmetKodu { get; set; }=default!;
     public string HizmetAdi { get; set; } = default!;

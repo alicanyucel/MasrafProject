@@ -2,7 +2,7 @@
 
 namespace MasrafProject.Domain.Entities;
 
-public sealed class ApprovalStatus:Entity
+public sealed class ApprovalStatus:Entity<Guid>
 {
     public bool Onay { get; set; }=default!;
 

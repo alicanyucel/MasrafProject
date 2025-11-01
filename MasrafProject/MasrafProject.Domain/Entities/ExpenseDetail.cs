@@ -1,7 +1,7 @@
 ﻿using MasrafProject.Domain.Abstractions;
 
 namespace MasrafProject.Domain.Entities;
-public class ExpenseDetail : Entity
+public class ExpenseDetail : Entity<Guid>
 {
     public Guid MasrafId { get; set; }
     public DateTime Tarih { get; set; }
