@@ -18,7 +18,7 @@ internal sealed class CreateCompanyCommandHandler(ICompanyRepository companyRepo
             .AnyAsync(x => !x.IsDeleted && x.Name == request.Name, cancellationToken);
         if (exists)
         {
-            return Result<string>.Failure("Aynı isimde şirket zaten mevcut. Kayıt yapılmadı.");
+            return Result<string>.Failure("Kayıt zaten ekli.");
         }
 
         Company company = mapper.Map<Company>(request);
