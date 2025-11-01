@@ -80,6 +80,14 @@ internal sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole,
             b.ToTable("UserTokens");
         });
 
+        // Company configuration: Identity seed (1,1) and unique Name
+        builder.Entity<Company>(b =>
+        {
+            b.ToTable("Companies");
+            b.Property(c => c.Id).UseIdentityColumn(1, 1);
+            b.HasIndex(c => c.Name).IsUnique();
+        });
+
         // Domain entity konfigürasyonları
         builder.ApplyConfigurationsFromAssembly(typeof(DependencyInjection).Assembly);
     }
