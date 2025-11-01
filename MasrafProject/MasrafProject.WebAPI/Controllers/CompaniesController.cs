@@ -21,7 +21,7 @@ namespace MasrafProject.WebAPI.Controllers
         {
             var response = await _mediator.Send(request, cancellationToken);
             return response.IsSuccessful ? Ok(new { message = "Ekleme işlemi başarılı." })
-            : BadRequest(new { message = "Ekleme işlemi başarısız." });
+            : BadRequest(new { message = "Ekleme işlemi başarısız.Aynı kaydu eklemediğnizden emin olun" });
         }
 
         [HttpPost]
