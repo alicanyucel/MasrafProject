@@ -7,8 +7,8 @@ namespace MasrafProject.Infrastructure.Context;
 
 internal sealed class DesignTimeTenantProvider : ITenantProvider
 {
-    public int TenantId => 0;
-    public void SetTenantId(int tenantId) { }
+    public Guid TenantId => Guid.Empty;
+    public void SetTenantId(Guid tenantId) { }
 }
 
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>

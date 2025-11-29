@@ -1,24 +1,28 @@
-ï»¿using MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
+using MasrafProject.Application.Features.ExpenseDetails.CreateExpenseDetails;
 using MasrafProject.Domain.Entities;
 using MasrafProject.Domain.Repositories;
 using MediatR;
 using TS.Result;
+using MasrafProject.Application.Interfaces;
 
 public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateExpenseDetailCommand, Result<string>>
 {
     private readonly IExpenseDetailRepository _expenseDetailRepo;
+    private readonly ITenantProvider _tenantProvider;
 
-    public CreateExpenseDetailCommandHandler(IExpenseDetailRepository expenseDetailRepo)
+    public CreateExpenseDetailCommandHandler(IExpenseDetailRepository expenseDetailRepo, ITenantProvider tenantProvider)
     {
         _expenseDetailRepo = expenseDetailRepo;
+        _tenantProvider = tenantProvider;
     }
 
     public async Task<Result<string>> Handle(CreateExpenseDetailCommand request, CancellationToken cancellationToken)
     {
         if (!request.YoneticiOnay)
-        return Result<string>.Failure("YÃ¶netici onayÄ± gereklidir.");
+            return Result<string>.Failure("Yönetici onayı gereklidir.");
         if (!request.MuhasebeOnay)
-        return Result<string>.Failure("Muhasebe onayÄ± gereklidir.");
+            return Result<string>.Failure("Muhasebe onayı gereklidir.");
+            
         var araToplam = request.BirimFiyat * request.Miktar;
         var kdvTutar = araToplam * request.KdvOran / 100;
         var toplamTutar = araToplam + kdvTutar;
@@ -39,6 +43,7 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
         var entity = new ExpenseDetail
         {
             Id = Guid.NewGuid(),
+            TenantId = _tenantProvider.TenantId,
             MasrafId = request.MasrafId,
             Tarih = request.Tarih,
             UserId = request.UserId,
@@ -65,8 +70,8 @@ public sealed class CreateExpenseDetailCommandHandler : IRequestHandler<CreateEx
         await _expenseDetailRepo.AddAsync(entity, cancellationToken);
 
         var mesaj = borcTutar > 0
-            ? $"Masraf kaydÄ± baÅŸarÄ±yla oluÅŸturuldu. Muhasebe onay tutarÄ± aÅŸÄ±ldÄ±, {borcTutar:N2} â‚º borÃ§ olarak kaydedildi."
-            : $"Masraf kaydÄ± baÅŸarÄ±yla oluÅŸturuldu. Nihai tutar (KDV dahil): {toplamTutar:N2} â‚º, muhasebe tarafÄ±ndan onaylandÄ±.";
+            ? $"Masraf kaydı başarıyla oluşturuldu. Muhasebe onay tutarı aşıldı, {borcTutar:N2} ? borç olarak kaydedildi."
+            : $"Masraf kaydı başarıyla oluşturuldu. Nihai tutar (KDV dahil): {toplamTutar:N2} ?, muhasebe tarafından onaylandı.";
 
         return Result<string>.Succeed(mesaj);
     }

@@ -1,30 +1,32 @@
-ï»¿using AutoMapper;
+using AutoMapper;
 using GenericRepository;
 using MasrafProject.Application.Features.Expenses.UpdateExpense;
 using MasrafProject.Domain.Repositories;
 using MediatR;
 using TS.Result;
+using MasrafProject.Application.Interfaces;
 
 internal sealed class UpdateExpenseCommandHandler(
     IExpenseRepository expenseRepository,
     IUnitOfWork unitOfWork,
-    IMapper mapper) : IRequestHandler<UpdateExpenseCommand, Result<string>>
+    IMapper mapper,
+    ITenantProvider tenantProvider) : IRequestHandler<UpdateExpenseCommand, Result<string>>
 {
     public async Task<Result<string>> Handle(UpdateExpenseCommand request, CancellationToken cancellationToken)
     {
         Expense? expense = await expenseRepository.GetByExpressionWithTrackingAsync(
-            P => P.Id == request.Id, cancellationToken);
-        if (expense == null)
+            p => p.Id == request.Id, cancellationToken);
+        if (expense is null)
         {
-            return Result<string>.Failure("Expense bulunamadÄ±.");
+            return Result<string>.Failure("Expense bulunamadý.");
         }
         mapper.Map(request, expense);
+        expense.TenantId = tenantProvider.TenantId;
         decimal kdvOrani = 0.20m;
         expense.ToplamKdvTutar = expense.ToplamTutar * kdvOrani;
         expense.GenelToplam = expense.ToplamTutar + expense.ToplamKdvTutar;
         expenseRepository.Update(expense);
         await unitOfWork.SaveChangesAsync(cancellationToken);
-        return $"Expense gÃ¼ncellendi. KDV: {expense.ToplamKdvTutar:C2}, Genel Toplam: {expense.GenelToplam:C2}";
+        return Result<string>.Succeed($"Expense güncellendi. KDV: {expense.ToplamKdvTutar:C2}, Genel Toplam: {expense.GenelToplam:C2}");
     }
 }
-

@@ -1,7 +1,8 @@
-ï»¿using GenericRepository;
+using GenericRepository;
 using MasrafProject.Domain.Repositories;
 using MediatR;
 using TS.Result;
+using MasrafProject.Application.Interfaces;
 
 namespace MasrafProject.Application.Features.ExpenseDetails.UpdateExpenseDetails;
 
@@ -9,31 +10,34 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
 {
     private readonly IExpenseDetailRepository _expenseDetailRepo;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITenantProvider _tenantProvider;
 
-    public UpdateExpenseDetailCommandHandler(IExpenseDetailRepository expenseDetailRepo, IUnitOfWork unitOfWork)
+    public UpdateExpenseDetailCommandHandler(
+        IExpenseDetailRepository expenseDetailRepo,
+        IUnitOfWork unitOfWork,
+        ITenantProvider tenantProvider)
     {
         _expenseDetailRepo = expenseDetailRepo;
         _unitOfWork = unitOfWork;
+        _tenantProvider = tenantProvider;
     }
 
     public async Task<Result<string>> Handle(UpdateExpenseDetailCommand request, CancellationToken cancellationToken)
     {
         var entity = await _expenseDetailRepo.GetByExpressionAsync(e => e.Id == request.Id, cancellationToken);
         if (entity is null)
-            return Result<string>.Failure("Masraf kaydÄ± bulunamadÄ±.");
+            return Result<string>.Failure("Masraf kaydı bulunamadı.");
 
         if (!request.YoneticiOnay)
-            return Result<string>.Failure("YÃ¶netici onayÄ± gereklidir.");
+            return Result<string>.Failure("Yönetici onayı gereklidir.");
 
         if (!request.MuhasebeOnay)
-            return Result<string>.Failure("Muhasebe onayÄ± gereklidir.");
+            return Result<string>.Failure("Muhasebe onayı gereklidir.");
 
-        // Tutar hesaplama
         var araToplam = request.BirimFiyat * request.Miktar;
         var kdvTutar = araToplam * request.KdvOran / 100;
         var toplamTutar = araToplam + kdvTutar;
 
-        // Muhasebe tutarÄ± kontrolÃ¼
         decimal borcTutar = 0;
         decimal kabulEdilenTutar;
 
@@ -48,7 +52,7 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
             borcTutar = toplamTutar - request.MuhasebeTutar;
         }
 
-        // GÃ¼ncelleme
+        entity.TenantId = _tenantProvider.TenantId;
         entity.MasrafId = request.MasrafId;
         entity.Tarih = request.Tarih;
         entity.UserId = request.UserId;
@@ -75,8 +79,8 @@ public sealed class UpdateExpenseDetailCommandHandler : IRequestHandler<UpdateEx
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var mesaj = borcTutar > 0
-            ? $"Masraf kaydÄ± gÃ¼ncellendi. Muhasebe onay tutarÄ± aÅŸÄ±ldÄ±, {borcTutar:N2} â‚º borÃ§ olarak kaydedildi."
-            : $"Masraf kaydÄ± gÃ¼ncellendi. Nihai tutar (KDV dahil): {toplamTutar:N2} â‚º, muhasebe tarafÄ±ndan onaylandÄ±.";
+            ? $"Masraf kaydı güncellendi. Muhasebe onay tutarı aşıldı, {borcTutar:N2} ? borç olarak kaydedildi."
+            : $"Masraf kaydı güncellendi. Nihai tutar (KDV dahil): {toplamTutar:N2} ?, muhasebe tarafından onaylandı.";
 
         return Result<string>.Succeed(mesaj);
     }
