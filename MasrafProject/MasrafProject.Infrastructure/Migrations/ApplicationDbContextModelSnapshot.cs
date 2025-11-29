@@ -69,7 +69,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Expenses");
+                    b.ToTable("Expenses", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.AppRole", b =>
@@ -207,7 +207,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ApprovalStatuses");
+                    b.ToTable("ApprovalStatuses", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.Company", b =>
@@ -231,7 +231,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -242,7 +242,10 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Companies");
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Companies", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ExpenseCenterCard", b =>
@@ -267,7 +270,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExpenseCenterCards");
+                    b.ToTable("ExpenseCenterCards", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ExpenseDetail", b =>
@@ -350,7 +353,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExpenseDetails");
+                    b.ToTable("ExpenseDetails", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ProjectCard", b =>
@@ -375,7 +378,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProjectCards");
+                    b.ToTable("ProjectCards", (string)null);
                 });
 
             modelBuilder.Entity("MasrafProject.Domain.Entities.ServiceCard", b =>
@@ -403,7 +406,7 @@ namespace MasrafProject.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ServiceCards");
+                    b.ToTable("ServiceCards", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
