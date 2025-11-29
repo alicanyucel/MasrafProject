@@ -1,8 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using MasrafProject.Application.Interfaces;
 
 namespace MasrafProject.Infrastructure.Context;
+
+internal sealed class DesignTimeTenantProvider : ITenantProvider
+{
+    public int TenantId => 0;
+    public void SetTenantId(int tenantId) { }
+}
 
 public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
 {
@@ -10,7 +17,6 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        // Read connection string from appsettings or env; fallback to LocalDB
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: true)
@@ -23,6 +29,8 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
             ?? "Data Source=DESKTOP-L6NJT48\\SQLEXPRESS;Initial Catalog=MasrafDataBase;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False";
 
         optionsBuilder.UseSqlServer(connectionString);
-        return new ApplicationDbContext(optionsBuilder.Options);
+        
+        var tenantProvider = new DesignTimeTenantProvider();
+        return new ApplicationDbContext(optionsBuilder.Options, tenantProvider);
     }
 }

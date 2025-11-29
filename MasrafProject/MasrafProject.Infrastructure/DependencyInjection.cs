@@ -1,4 +1,3 @@
-﻿
 using GenericRepository;
 using MasrafProject.Domain.Entities;
 using MasrafProject.Infrastructure.Context;
@@ -12,6 +11,8 @@ using Microsoft.IdentityModel.Tokens;
 using Scrutor;
 using System.Reflection;
 using System.Text;
+using MasrafProject.Application.Interfaces;
+using MasrafProject.Application.Services;
 
 namespace MasrafProject.Infrastructure;
 
@@ -19,6 +20,9 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // Multi-tenant provider
+        services.AddScoped<ITenantProvider, TenantProvider>();
+
         // DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
         {
@@ -43,9 +47,7 @@ public static class DependencyInjection
             options.Password.RequireUppercase = false;
             options.Password.RequireLowercase = false;
             options.Password.RequireDigit = false;
-
             options.SignIn.RequireConfirmedEmail = true;
-
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 3;
             options.Lockout.AllowedForNewUsers = true;
