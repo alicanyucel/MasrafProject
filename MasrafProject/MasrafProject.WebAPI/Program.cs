@@ -123,6 +123,7 @@ app.UseCors();
 app.UseExceptionHandler();
 app.UseRateLimiter();
 app.UseAuthentication();
+app.UseMiddleware<TenantResolutionMiddleware>();
 app.UseAuthorization();
 app.UseHangfireDashboard("/hangfire");
 
